@@ -3,122 +3,138 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quản Lý Nề Nếp - THPT Quang Trung</title>
+  <title>Hệ Thống Quản Lý Nề Nếp - THPT Quang Trung</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </head>
 <body class="bg-slate-200 text-slate-800 font-sans antialiased select-none">
 
-  <!-- Khung chuẩn Mobile-First -->
   <div class="max-w-md mx-auto min-h-screen bg-slate-50 shadow-2xl flex flex-col justify-between relative overflow-hidden">
     
-    <!-- HEADER CHUNG -->
-    <header class="bg-gradient-to-r from-blue-800 to-blue-600 text-white p-4 rounded-b-2xl shadow-md z-10">
-      <div class="flex items-center justify-between">
-        <div>
-          <p class="text-[11px] text-blue-200 uppercase font-bold tracking-wider">THPT Quang Trung • Đông Giang</p>
-          <h1 class="text-lg font-extrabold tracking-tight" id="header-title">Hệ Thống Quản Lý Thi Đua</h1>
-        </div>
-        <button id="btn-logout" onclick="switchRole('login')" class="hidden bg-white/20 hover:bg-white/30 text-white text-xs px-3 py-1.5 rounded-lg font-medium backdrop-blur-sm transition">
-          <i class="fas fa-sign-out-alt mr-1"></i> Đổi vai trò
+    <!-- HEADER -->
+    <header class="bg-gradient-to-r from-blue-900 via-blue-800 to-blue-700 text-white p-4 rounded-b-2xl shadow-md z-10 flex items-center justify-between">
+      <div>
+        <p class="text-[10px] text-blue-200 uppercase font-bold tracking-widest">THPT Quang Trung • Đông Giang</p>
+        <h1 class="text-base font-extrabold tracking-tight mt-0.5" id="header-title">Cổng Quản Lý Thi Đua</h1>
+      </div>
+      <div class="flex items-center gap-2">
+        <span id="user-badge" class="hidden text-[11px] bg-blue-950/60 border border-blue-400/30 px-2.5 py-1 rounded-full font-semibold"></span>
+        <button id="btn-logout" onclick="logout()" class="hidden bg-red-500/80 hover:bg-red-600 text-white text-xs px-2.5 py-1.5 rounded-lg font-medium transition shadow-sm">
+          <i class="fas fa-power-off"></i>
         </button>
-        <span id="badge-year" class="bg-blue-900/50 text-xs px-2.5 py-1 rounded-full border border-blue-400/50 font-medium">
-          2026 - 2027
-        </span>
       </div>
     </header>
 
-    <!-- KHU VỰC NỘI DUNG ĐỘNG -->
-    <main class="flex-1 p-4 overflow-y-auto pb-20">
+    <!-- NỘI DUNG CHÍNH -->
+    <main class="flex-1 p-4 overflow-y-auto pb-24">
 
-      <!-- 1. MÀN HÌNH ĐĂNG NHẬP (CHỌN 4 VAI TRÒ) -->
-      <section id="view-login" class="space-y-4 mt-2">
-        <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 text-center">
-          <div class="w-12 h-12 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center mx-auto mb-2 text-xl font-bold">
-            <i class="fas fa-school"></i>
+      <!-- 1. MÀN HÌNH ĐĂNG NHẬP -->
+      <section id="view-login" class="mt-8">
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+          <div class="text-center mb-6">
+            <div class="w-16 h-16 bg-blue-50 text-blue-700 rounded-2xl flex items-center justify-center mx-auto mb-3 text-3xl border border-blue-100 shadow-sm">
+              <i class="fas fa-university"></i>
+            </div>
+            <h2 class="text-xl font-extrabold text-slate-800">Đăng Nhập Hệ Thống</h2>
+            <p class="text-xs text-slate-500 mt-1">Sử dụng tài khoản nội bộ được Đoàn trường cấp</p>
           </div>
-          <h2 class="text-lg font-bold text-slate-800">Cổng Thông Tin Nề Nếp</h2>
-          <p class="text-xs text-slate-500 mt-1">Chọn phân quyền truy cập để trải nghiệm hệ thống</p>
+
+          <form onsubmit="handleLogin(event)" class="space-y-4 text-sm">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1.5">Tên đăng nhập</label>
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400"><i class="fas fa-user"></i></span>
+                <input type="text" id="login-user" required autocomplete="off" placeholder="Nhập mã tài khoản..." class="w-full pl-10 pr-3 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-600 focus:bg-white font-medium transition">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1.5">Mật khẩu</label>
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400"><i class="fas fa-lock"></i></span>
+                <input type="password" id="login-pass" required placeholder="Nhập mật khẩu..." class="w-full pl-10 pr-3 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-600 focus:bg-white font-medium transition">
+              </div>
+            </div>
+
+            <div id="login-error" class="hidden text-xs text-red-600 bg-red-50 p-2.5 rounded-lg border border-red-200 font-medium text-center"></div>
+
+            <button type="submit" class="w-full py-3.5 bg-blue-700 hover:bg-blue-800 active:scale-[0.99] text-white font-bold rounded-xl shadow-md transition">
+              Đăng Nhập <i class="fas fa-arrow-right ml-1"></i>
+            </button>
+          </form>
+        </div>
+        <p class="text-center text-[11px] text-slate-400 mt-6">Phần mềm Quản lý Nề nếp & Thi đua • Năm học 2026 - 2027</p>
+      </section>
+
+      <!-- 2. PHÂN HỆ ĐỘI CỜ ĐỎ -->
+      <section id="view-codo" class="hidden space-y-4">
+        <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
+          <h3 class="font-bold text-red-700 mb-3 flex items-center gap-2 text-sm uppercase tracking-wide">
+            <i class="fas fa-pen-square text-base"></i> Lập Phiếu Ghi Nhận Vi Phạm
+          </h3>
+          
+          <div class="space-y-3.5 text-sm">
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1">Lớp vi phạm:</label>
+              <select id="input-class" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl font-bold text-slate-700 focus:border-blue-500 outline-none"></select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1">Họ tên học sinh / Tập thể:</label>
+              <input type="text" id="input-student" placeholder="VD: Nguyễn Văn A (hoặc Cả lớp)" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-blue-500 outline-none">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1">Nội dung vi phạm & Mức trừ:</label>
+              <select id="input-rule" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:border-blue-500 outline-none">
+                <option value="5|Đi học muộn sau 7h00">Đi học muộn sau 7h00 (-5 điểm)</option>
+                <option value="10|Sai đồng phục / Không đeo bảng tên">Sai đồng phục / Thiếu bảng tên (-10 điểm)</option>
+                <option value="15|Vệ sinh lớp bẩn / Đổ rác trễ">Vệ sinh lớp bẩn / Đổ rác trễ (-15 điểm)</option>
+                <option value="20|Mất trật tự trong giờ học">Mất trật tự trong giờ học (-20 điểm)</option>
+                <option value="30|Sử dụng điện thoại trái phép">Dùng điện thoại trong giờ (-30 điểm)</option>
+                <option value="50|Vô lễ với giáo viên / Đánh nhau">Vi phạm kỷ luật nghiêm trọng (-50 điểm)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1">Ảnh minh chứng thực tế:</label>
+              <label class="flex flex-col items-center justify-center w-full p-3 border-2 border-dashed border-slate-300 rounded-xl text-slate-500 hover:bg-slate-50 cursor-pointer transition">
+                <i class="fas fa-camera text-blue-600 text-lg mb-1"></i>
+                <span id="photo-label" class="text-xs font-medium text-center">Chạm để chụp hoặc tải ảnh lên</span>
+                <input type="file" id="input-photo" accept="image/*" class="hidden" onchange="previewPhoto(this)">
+              </label>
+              <img id="photo-preview" class="hidden mt-2 w-full h-36 object-cover rounded-xl border border-slate-200">
+            </div>
+
+            <button onclick="submitViolation()" class="w-full py-3 bg-red-600 hover:bg-red-700 active:scale-[0.99] text-white font-bold rounded-xl shadow-md transition">
+              <i class="fas fa-check-circle mr-1"></i> Xác Nhận & Trừ Điểm
+            </button>
+          </div>
         </div>
 
-        <div class="space-y-3">
-          <button onclick="switchRole('codo')" class="w-full flex items-center justify-between p-4 bg-white hover:bg-red-50 border-l-4 border-red-600 rounded-xl shadow-sm transition group">
-            <div class="flex items-center gap-3.5 text-left">
-              <div class="w-10 h-10 rounded-lg bg-red-100 text-red-600 flex items-center justify-center text-lg">
-                <i class="fas fa-flag"></i>
-              </div>
-              <div>
-                <p class="font-bold text-slate-800 group-hover:text-red-700">Đội Cờ Đỏ / Xung Kích</p>
-                <p class="text-xs text-slate-500">Chấm điểm, ghi lỗi & đính kèm minh chứng</p>
-              </div>
-            </div>
-            <i class="fas fa-chevron-right text-slate-400 group-hover:text-red-600"></i>
-          </button>
-
-          <button onclick="switchRole('gvcn')" class="w-full flex items-center justify-between p-4 bg-white hover:bg-emerald-50 border-l-4 border-emerald-600 rounded-xl shadow-sm transition group">
-            <div class="flex items-center gap-3.5 text-left">
-              <div class="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center text-lg">
-                <i class="fas fa-chalkboard-teacher"></i>
-              </div>
-              <div>
-                <p class="font-bold text-slate-800 group-hover:text-emerald-700">Giáo Viên Chủ Nhiệm</p>
-                <p class="text-xs text-slate-500">Theo dõi chi tiết lớp & gửi khiếu nại</p>
-              </div>
-            </div>
-            <i class="fas fa-chevron-right text-slate-400 group-hover:text-emerald-600"></i>
-          </button>
-
-          <button onclick="switchRole('hocsinh')" class="w-full flex items-center justify-between p-4 bg-white hover:bg-sky-50 border-l-4 border-sky-600 rounded-xl shadow-sm transition group">
-            <div class="flex items-center gap-3.5 text-left">
-              <div class="w-10 h-10 rounded-lg bg-sky-100 text-sky-600 flex items-center justify-center text-lg">
-                <i class="fas fa-trophy"></i>
-              </div>
-              <div>
-                <p class="font-bold text-slate-800 group-hover:text-sky-700">Học Sinh Toàn Trường</p>
-                <p class="text-xs text-slate-500">Bảng xếp hạng thi đua 15 lớp (Mốc 1440đ)</p>
-              </div>
-            </div>
-            <i class="fas fa-chevron-right text-slate-400 group-hover:text-sky-600"></i>
-          </button>
-
-          <button onclick="switchRole('admin')" class="w-full flex items-center justify-between p-4 bg-white hover:bg-purple-50 border-l-4 border-purple-600 rounded-xl shadow-sm transition group">
-            <div class="flex items-center gap-3.5 text-left">
-              <div class="w-10 h-10 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center text-lg">
-                <i class="fas fa-user-shield"></i>
-              </div>
-              <div>
-                <p class="font-bold text-slate-800 group-hover:text-purple-700">Admin / Ban Thường Vụ Đoàn</p>
-                <p class="text-xs text-slate-500">Duyệt khiếu nại & quản trị dữ liệu gốc</p>
-              </div>
-            </div>
-            <i class="fas fa-chevron-right text-slate-400 group-hover:text-purple-600"></i>
-          </button>
+        <!-- Lịch sử Cờ đỏ vừa chấm -->
+        <div>
+          <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 px-1">Lịch sử đã ghi nhận gần đây</h4>
+          <div id="codo-history-list" class="space-y-2.5"></div>
         </div>
       </section>
 
-      <!-- 2. GIAO DIỆN ĐỘI CỜ ĐỎ (NHẬP VI PHẠM) -->
-      <section id="view-codo" class="hidden space-y-4">
-        <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
-          <h3 class="font-bold text-red-700 mb-3 flex items-center gap-2">
-            <i class="fas fa-edit"></i> Phiếu Ghi Nhận Vi Phạm Nề Nếp
-          </h3>
-          
-          <div class="space-y-3 text-sm">
-            <div>
-              <label class="block text-xs font-bold text-slate-600 mb-1">Chọn lớp vi phạm:</label>
-              <select id="input-class" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-500 font-medium"></select>
-            </div>
+      <!-- 3. PHÂN HỆ BẢNG XẾP HẠNG (HỌC SINH & CHUNG) -->
+      <section id="view-hocsinh" class="hidden space-y-3">
+        <div class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-3.5 rounded-2xl shadow-sm flex items-center justify-between">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-wider text-blue-100">Quỹ điểm chuẩn tuần</p>
+            <p class="text-xl font-extrabold">1.440 Điểm</p>
+          </div>
+          <div class="text-right">
+            <span class="text-[11px] bg-white/20 px-2.5 py-1 rounded-full font-medium">15 Lớp • Toàn trường</span>
+          </div>
+        </div>
+        <div id="leaderboard-list" class="space-y-2.5"></div>
+      </section>
 
-            <div>
-              <label class="block text-xs font-bold text-slate-600 mb-1">Họ tên học sinh (hoặc tập thể):</label>
-              <input type="text" id="input-student" placeholder="VD: Nguyễn Văn A (hoặc Cả lớp)" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-500">
-            </div>
-
-            <div>
-              <label class="block text-xs font-bold text-slate-600 mb-1">Lỗi vi phạm & Điểm trừ:</label>
-              <select id="input-rule" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-500">
-                <option value="5|Đi học muộn sau 7h00">Đi học muộn sau 7h00 (-5 điểm)</option>
-                <option value="10|Không mặc đồng phục / Không đeo bảng tên">Sai đồng phục / Thiếu bảng tên (-10 điểm)</option>
-                <option value="15|Trực nhật bẩn / Đổ rác trễ">Vệ sinh lớp bẩn / Đổ rác trễ (-15 điểm)</option>
-                <option value="20|Nói chuyện riêng / Mất trật tự giờ học">Mất trật tự trong
-                  
+      <!-- 4. PHÂN HỆ GIÁO VIÊN CHỦ NHIỆM -->
+      <section id="view-gvcn" class="hidden space-y-4">
+        <div class="bg-white p-3.5 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between">
+          <div class="
+            

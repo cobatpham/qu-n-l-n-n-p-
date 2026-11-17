@@ -2,361 +2,77 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quản Lý Nề Nếp - THPT Quang Trung</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Mini Game - Săn Vàng Cực Hay</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    body { touch-action: none; }
+  </style>
 </head>
-<body class="bg-slate-100 text-slate-800 font-sans antialiased select-none">
+<body class="bg-amber-950 text-white font-sans antialiased overflow-hidden select-none">
 
-  <div class="max-w-md mx-auto min-h-screen bg-white shadow-xl flex flex-col justify-between relative">
+  <div class="max-w-md mx-auto h-screen flex flex-col justify-between relative bg-gradient-to-b from-sky-400 via-sky-600 to-amber-900 shadow-2xl overflow-hidden border-x border-amber-900">
     
-    <!-- HEADER -->
-    <header class="bg-blue-900 text-white p-4 shadow-md flex items-center justify-between">
+    <!-- HEADER THÔNG TIN -->
+    <header class="p-4 flex justify-between items-center bg-black/30 backdrop-blur border-b border-white/10 z-10">
       <div>
-        <p class="text-[10px] text-blue-200 uppercase font-bold tracking-widest">THPT Quang Trung • Đông Giang</p>
-        <h1 class="text-base font-extrabold" id="header-title">Cổng Quản Lý Thi Đua</h1>
+        <p class="text-[10px] uppercase font-bold text-amber-200">Tiền vàng</p>
+        <p class="text-2xl font-black text-amber-300" id="score-val">$0</p>
       </div>
-      <div>
-        <span id="user-badge" class="hidden text-xs bg-blue-800 px-3 py-1 rounded-full font-bold border border-blue-600"></span>
-        <button id="btn-logout" onclick="appLogout()" class="hidden bg-red-600 text-white text-xs px-3 py-1.5 rounded-lg font-bold shadow">
-          <i class="fas fa-power-off"></i> Thoát
-        </button>
+      <div class="text-center">
+        <p class="text-[10px] uppercase font-bold text-amber-200">Mục tiêu</p>
+        <p class="text-lg font-bold text-white" id="target-val">$300</p>
+      </div>
+      <div class="text-right">
+        <p class="text-[10px] uppercase font-bold text-amber-200">Thời gian</p>
+        <p class="text-xl font-black text-red-300" id="time-val">45s</p>
       </div>
     </header>
 
-    <!-- MAIN CONTENT -->
-    <main class="flex-1 p-4 overflow-y-auto pb-24">
+    <!-- KHUNG TRÒ CHƠI (CANVAS) -->
+    <div class="relative flex-1 overflow-hidden cursor-pointer" id="game-container" onclick="fireHook()">
+      <canvas id="gameCanvas" class="absolute inset-0 w-full h-full"></canvas>
 
-      <!-- MÀN HÌNH ĐĂNG NHẬP -->
-      <section id="view-login" class="py-4">
-        <div class="text-center mb-6">
-          <div class="w-16 h-16 bg-blue-100 text-blue-800 rounded-2xl flex items-center justify-center mx-auto mb-3 text-3xl shadow-inner">
-            <i class="fas fa-shield-alt"></i>
-          </div>
-          <h2 class="text-xl font-extrabold text-slate-900">Đăng Nhập Hệ Thống</h2>
-          <p class="text-xs text-slate-500 mt-1">Chọn vai trò bên dưới để trải nghiệm ngay lập tức</p>
+      <!-- MÀN HÌNH BẮT ĐẦU / KẾT THÚC -->
+      <div id="game-overlay" class="absolute inset-0 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center z-20">
+        <div class="w-20 h-20 bg-amber-500/20 text-amber-400 rounded-3xl flex items-center justify-center text-4xl mb-4 border border-amber-500/30 shadow-lg">
+          <i class="fas fa-gem"></i>
         </div>
+        <h2 id="overlay-title" class="text-2xl font-black tracking-tight mb-2">THỢ SĂN VÀNG</h2>
+        <p id="overlay-desc" class="text-xs text-slate-300 mb-6 max-w-xs">Chạm vào màn hình hoặc bấm nút phía dưới để phóng móc câu gắp vàng và kho báu!</p>
+        
+        <button onclick="startGame()" class="w-full max-w-xs py-4 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 active:scale-95 text-slate-950 font-black rounded-2xl shadow-lg transition text-base">
+          BẮT ĐẦU ĐÀO <i class="fas fa-play ml-1"></i>
+        </button>
+      </div>
+    </div>
 
-        <div class="space-y-3">
-          <button onclick="directLogin('admin')" class="w-full p-3.5 bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-900 rounded-xl font-bold text-sm flex items-center justify-between shadow-sm transition">
-            <span class="flex items-center gap-2"><i class="fas fa-user-shield text-purple-700 text-lg"></i> Đăng nhập Admin Đoàn</span>
-            <i class="fas fa-chevron-right text-xs text-purple-400"></i>
-          </button>
-
-          <button onclick="directLogin('codo')" class="w-full p-3.5 bg-red-50 hover:bg-red-100 border border-red-200 text-red-900 rounded-xl font-bold text-sm flex items-center justify-between shadow-sm transition">
-            <span class="flex items-center gap-2"><i class="fas fa-flag text-red-600 text-lg"></i> Đăng nhập Đội Cờ Đỏ</span>
-            <i class="fas fa-chevron-right text-xs text-red-400"></i>
-          </button>
-
-          <button onclick="directLogin('gvcn')" class="w-full p-3.5 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-900 rounded-xl font-bold text-sm flex items-center justify-between shadow-sm transition">
-            <span class="flex items-center gap-2"><i class="fas fa-chalkboard-teacher text-emerald-600 text-lg"></i> Đăng nhập GVCN Lớp</span>
-            <i class="fas fa-chevron-right text-xs text-emerald-400"></i>
-          </button>
-
-          <button onclick="directLogin('hs')" class="w-full p-3.5 bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-900 rounded-xl font-bold text-sm flex items-center justify-between shadow-sm transition">
-            <span class="flex items-center gap-2"><i class="fas fa-trophy text-blue-600 text-lg"></i> Xem Bảng Xếp Hạng (Học Sinh)</span>
-            <i class="fas fa-chevron-right text-xs text-blue-400"></i>
-          </button>
-        </div>
-      </section>
-
-      <!-- PHÂN HỆ CỜ ĐỎ -->
-      <section id="view-codo" class="hidden space-y-4">
-        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 shadow-sm">
-          <h3 class="font-bold text-red-700 mb-3 text-sm uppercase"><i class="fas fa-pen-square"></i> Ghi Nhận Lỗi Vi Phạm</h3>
-          <div class="space-y-3 text-sm">
-            <div>
-              <label class="block text-xs font-bold text-slate-600 mb-1">Chọn lớp:</label>
-              <select id="codo-class" class="w-full p-3 bg-white border border-slate-300 rounded-xl font-bold text-slate-800"></select>
-            </div>
-            <div>
-              <label class="block text-xs font-bold text-slate-600 mb-1">Học sinh / Tập thể:</label>
-              <input type="text" id="codo-student" placeholder="VD: Nguyễn Văn A" class="w-full p-3 bg-white border border-slate-300 rounded-xl">
-            </div>
-            <div>
-              <label class="block text-xs font-bold text-slate-600 mb-1">Nội dung lỗi:</label>
-              <select id="codo-rule" class="w-full p-3 bg-white border border-slate-300 rounded-xl">
-                <option value="5|Đi học muộn sau 7h00">Đi học muộn sau 7h00 (-5 điểm)</option>
-                <option value="10|Sai đồng phục / Thiếu bảng tên">Sai đồng phục / Thiếu bảng tên (-10 điểm)</option>
-                <option value="15|Vệ sinh lớp bẩn / Đổ rác trễ">Vệ sinh lớp bẩn / Đổ rác trễ (-15 điểm)</option>
-                <option value="30|Sử dụng điện thoại trái phép">Dùng điện thoại trong giờ (-30 điểm)</option>
-              </select>
-            </div>
-            <button onclick="saveViolationItem()" class="w-full py-3.5 bg-red-600 text-white font-bold rounded-xl shadow-md">Xác Nhận & Trừ Điểm</button>
-          </div>
-        </div>
-      </section>
-
-      <!-- PHÂN HỆ XẾP HẠNG -->
-      <section id="view-hocsinh" class="hidden space-y-3">
-        <div class="bg-gradient-to-r from-blue-700 to-indigo-700 text-white p-4 rounded-2xl shadow flex items-center justify-between">
-          <div>
-            <p class="text-xs text-blue-200 font-bold">Quỹ điểm thi đua tuần</p>
-            <p class="text-2xl font-black">1.440 Điểm</p>
-          </div>
-          <span class="text-xs bg-white/20 px-3 py-1 rounded-full font-bold">15 Lớp</span>
-        </div>
-        <div id="leaderboard-container" class="space-y-2"></div>
-      </section>
-
-      <!-- PHÂN HỆ GVCN -->
-      <section id="view-gvcn" class="hidden space-y-4">
-        <div class="bg-slate-50 p-4 rounded-2xl border shadow-sm flex items-center justify-between">
-          <span class="text-xs font-bold text-slate-700">Lớp chủ nhiệm:</span>
-          <select id="gvcn-class-select" onchange="renderGvcnData()" class="p-2.5 bg-white border border-emerald-300 text-emerald-900 font-extrabold text-sm rounded-xl"></select>
-        </div>
-        <div id="gvcn-list" class="space-y-3"></div>
-      </section>
-
-      <!-- PHÂN HỆ ADMIN -->
-      <section id="view-admin" class="hidden space-y-4">
-        <div class="grid grid-cols-2 gap-3">
-          <div class="bg-slate-50 p-3.5 rounded-xl border shadow-sm">
-            <p class="text-xs text-slate-500 font-bold">Tổng lỗi toàn trường</p>
-            <p class="text-2xl font-black text-slate-900 mt-1" id="admin-total-v">0</p>
-          </div>
-          <div class="bg-slate-50 p-3.5 rounded-xl border shadow-sm">
-            <p class="text-xs text-slate-500 font-bold">Đơn khiếu nại chờ duyệt</p>
-            <p class="text-2xl font-black text-amber-600 mt-1" id="admin-total-a">0</p>
-          </div>
-        </div>
-        <div id="admin-appeals-box" class="space-y-3"></div>
-      </section>
-
-    </main>
-
-    <!-- NAVIGATION -->
-    <nav id="bottom-nav" class="hidden fixed bottom-0 max-w-md w-full bg-white border-t border-slate-200 flex justify-around py-3 px-2 z-20 shadow-lg"></nav>
+    <!-- ĐIỀU KHIỂN NÚT BẤM DƯỚI ĐÁY -->
+    <div class="p-4 bg-amber-950/90 border-t border-amber-900 flex justify-center z-10">
+      <button onclick="fireHook()" class="w-full max-w-xs py-4 bg-gradient-to-r from-amber-600 to-yellow-600 active:scale-95 text-white font-black rounded-2xl shadow-lg border border-amber-400/30 text-lg flex items-center justify-center gap-2">
+        <i class="fas fa-anchor"></i> PHÓNG MÓC CÂU
+      </button>
+    </div>
 
   </div>
 
   <script>
-    const CLASSES = ['10/1', '10/2', '10/3', '10/4', '10/5', '11/1', '11/2', '11/3', '11/4', '11/5', '12/1', '12/2', '12/3', '12/4', '12/5'];
-    const ROLES = {
-      'admin': { name: 'Admin Đoàn', tab: 'admin' },
-      'codo':  { name: 'Đội Cờ Đỏ', tab: 'codo' },
-      'gvcn':  { name: 'GVCN Lớp', tab: 'gvcn' },
-      'hs':    { name: 'Học Sinh', tab: 'hocsinh' }
-    };
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
 
-    const DB_KEY = 'thpt_quangtrung_v4';
-    let currentRole = null;
-
-    function getDB() {
-      const data = localStorage.getItem(DB_KEY);
-      if (data) return JSON.parse(data);
-      const defaultData = [
-        { id: 1, className: '10/2', student: 'Trần Minh Quân', rule: 'Đi học muộn sau 7h00', points: 5, status: 'normal', reason: '' },
-        { id: 2, className: '11/3', student: 'Lê Thị Hoa', rule: 'Sai đồng phục / Thiếu bảng tên', points: 10, status: 'appealing', reason: 'Áo bị rách trên đường đi học.' }
-      ];
-      localStorage.setItem(DB_KEY, JSON.stringify(defaultData));
-      return defaultData;
+    function resizeCanvas() {
+      canvas.width = canvas.parentElement.clientWidth;
+      canvas.height = canvas.parentElement.clientHeight;
     }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
 
-    function saveDB(data) {
-      localStorage.setItem(DB_KEY, JSON.stringify(data));
-    }
+    let score = 0;
+    let targetScore = 300;
+    let timeLeft = 45;
+    let isPlaying = false;
+    let timerInterval;
 
-    // Khởi tạo các ô select lớp
-    function initSelectors() {
-      const codoSel = document.getElementById('codo-class');
-      const gvcnSel = document.getElementById('gvcn-class-select');
-      codoSel.innerHTML = '';
-      gvcnSel.innerHTML = '';
-      CLASSES.forEach(c => {
-        codoSel.innerHTML += `<option value="${c}">Lớp ${c}</option>`;
-        gvcnSel.innerHTML += `<option value="${c}">Lớp ${c}</option>`;
-      });
-      gvcnSel.value = '11/3';
-    }
-
-    // ĐĂNG NHẬP TRỰC TIẾP 1 CHẠM (KHÔNG BAO GIỜ LỖI)
-    function directLogin(roleKey) {
-      currentRole = ROLES[roleKey];
-      
-      // Ẩn màn hình đăng nhập, hiện giao diện chính
-      document.getElementById('view-login').classList.add('hidden');
-      document.getElementById('user-badge').innerText = currentRole.name;
-      document.getElementById('user-badge').classList.remove('hidden');
-      document.getElementById('btn-logout').classList.remove('hidden');
-      document.getElementById('bottom-nav').classList.remove('hidden');
-
-      setupNav(roleKey);
-      switchTab(currentRole.tab);
-    }
-
-    function setupNav(roleKey) {
-      const nav = document.getElementById('bottom-nav');
-      let html = `<button onclick="switchTab('hocsinh')" class="flex flex-col items-center text-slate-600 font-bold text-xs"><i class="fas fa-trophy text-base mb-0.5"></i> Xếp Hạng</button>`;
-
-      if (roleKey === 'codo') {
-        html += `<button onclick="switchTab('codo')" class="flex flex-col items-center text-red-600 font-bold text-xs"><i class="fas fa-pen text-base mb-0.5"></i> Ghi Lỗi</button>`;
-      } else if (roleKey === 'gvcn') {
-        html += `<button onclick="switchTab('gvcn')" class="flex flex-col items-center text-emerald-600 font-bold text-xs"><i class="fas fa-list text-base mb-0.5"></i> Khiếu Nại</button>`;
-      } else if (roleKey === 'admin') {
-        html += `<button onclick="switchTab('admin')" class="flex flex-col items-center text-purple-600 font-bold text-xs"><i class="fas fa-shield-alt text-base mb-0.5"></i> Duyệt Lỗi</button>`;
-      }
-      nav.innerHTML = html;
-    }
-
-    function switchTab(tabName) {
-      ['view-codo', 'view-hocsinh', 'view-gvcn', 'view-admin'].forEach(id => document.getElementById(id).classList.add('hidden'));
-      document.getElementById('view-' + tabName).classList.remove('hidden');
-
-      if (tabName === 'hocsinh') renderLeaderboard();
-      if (tabName === 'gvcn') renderGvcnData();
-      if (tabName === 'admin') renderAdminData();
-    }
-
-    function appLogout() {
-      currentRole = null;
-      ['view-codo', 'view-hocsinh', 'view-gvcn', 'view-admin'].forEach(id => document.getElementById(id).classList.add('hidden'));
-      document.getElementById('view-login').classList.remove('hidden');
-      document.getElementById('user-badge').classList.add('hidden');
-      document.getElementById('btn-logout').classList.add('hidden');
-      document.getElementById('bottom-nav').classList.add('hidden');
-      document.getElementById('header-title').innerText = 'Cổng Quản Lý Thi Đua';
-    }
-
-    // Cờ đỏ ghi lỗi
-    function saveViolationItem() {
-      const cls = document.getElementById('codo-class').value;
-      const stu = document.getElementById('codo-student').value.trim() || 'Học sinh vi phạm';
-      const ruleData = document.getElementById('codo-rule').value.split('|');
-
-      let db = getDB();
-      db.unshift({
-        id: Date.now(),
-        className: cls,
-        student: stu,
-        rule: ruleData[1],
-        points: parseInt(ruleData[0]),
-        status: 'normal',
-        reason: ''
-      });
-      saveDB(db);
-
-      document.getElementById('codo-student').value = '';
-      alert(`Đã ghi nhận trừ ${ruleData[0]} điểm lớp ${cls}!`);
-      switchTab('hocsinh');
-    }
-
-    // Bảng xếp hạng 15 lớp
-    function renderLeaderboard() {
-      const db = getDB();
-      const scores = CLASSES.map(c => {
-        const deducted = db.filter(item => item.className === c && item.status !== 'approved').reduce((sum, item) => sum + item.points, 0);
-        return { className: c, score: 1440 - deducted, deducted };
-      }).sort((a, b) => b.score - a.score);
-
-      const box = document.getElementById('leaderboard-container');
-      box.innerHTML = '';
-      scores.forEach((item, index) => {
-        box.innerHTML += `
-          <div class="bg-slate-50 p-3.5 rounded-xl border flex items-center justify-between shadow-sm">
-            <div class="flex items-center gap-3">
-              <span class="w-7 h-7 rounded-full bg-slate-200 font-extrabold text-xs flex items-center justify-center text-slate-700">${index + 1}</span>
-              <div>
-                <p class="font-bold text-slate-900 text-sm">Lớp ${item.className}</p>
-                <p class="text-[11px] text-slate-400">${item.deducted > 0 ? 'Đã trừ ' + item.deducted + ' điểm' : 'Bảo toàn điểm tuyệt đối'}</p>
-              </div>
-            </div>
-            <p class="font-extrabold text-blue-700 text-base">${item.score}đ</p>
-          </div>
-        `;
-      });
-    }
-
-    // GVCN xem và khiếu nại
-    function renderGvcnData() {
-      const selClass = document.getElementById('gvcn-class-select').value;
-      const db = getDB();
-      const list = db.filter(item => item.className === selClass);
-      const box = document.getElementById('gvcn-list');
-      box.innerHTML = '';
-
-      if (list.length === 0) {
-        box.innerHTML = `<div class="text-center p-6 text-slate-400 text-xs bg-slate-50 rounded-xl border">Lớp ${selClass} không có lỗi vi phạm.</div>`;
-        return;
-      }
-
-      list.forEach(item => {
-        let actionHTML = '';
-        if (item.status === 'normal') {
-          actionHTML = `<button onclick="sendAppeal(${item.id})" class="mt-2 w-full py-2 bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold rounded-lg text-xs border border-amber-300">Gửi Khiếu Nại</button>`;
-        } else if (item.status === 'appealing') {
-          actionHTML = `<div class="mt-2 p-2 bg-amber-50 text-xs text-amber-900 rounded border border-amber-200"><b>Đang chờ Đoàn duyệt:</b> "${item.reason}"</div>`;
-        } else if (item.status === 'approved') {
-          actionHTML = `<div class="mt-2 p-2 bg-emerald-50 text-xs text-emerald-800 font-bold rounded border border-emerald-200">Đã được hoàn điểm thành công!</div>`;
-        }
-
-        box.innerHTML += `
-          <div class="bg-slate-50 p-4 rounded-xl border shadow-sm">
-            <p class="font-bold text-slate-900 text-sm">${item.rule} <span class="text-red-600">(-${item.points}đ)</span></p>
-            <p class="text-xs text-slate-500 mt-0.5">Đối tượng: <b>${item.student}</b></p>
-            ${actionHTML}
-          </div>
-        `;
-      });
-    }
-
-    function sendAppeal(id) {
-      const reason = prompt('Nhập lý do khiếu nại gửi Đoàn trường:');
-      if (reason && reason.trim()) {
-        let db = getDB();
-        const target = db.find(item => item.id === id);
-        if (target) {
-          target.status = 'appealing';
-          target.reason = reason.trim();
-          saveDB(db);
-          renderGvcnData();
-          alert('Đã gửi đơn khiếu nại thành công!');
-        }
-      }
-    }
-
-    // Admin duyệt khiếu nại
-    function renderAdminData() {
-      const db = getDB();
-      const appeals = db.filter(item => item.status === 'appealing');
-      document.getElementById('admin-total-v').innerText = db.filter(item => item.status !== 'approved').length;
-      document.getElementById('admin-total-a').innerText = appeals.length;
-
-      const box = document.getElementById('admin-appeals-box');
-      box.innerHTML = '';
-
-      if (appeals.length === 0) {
-        box.innerHTML = `<div class="text-center p-6 text-slate-400 text-xs bg-slate-50 rounded-xl border">Không có đơn khiếu nại nào cần duyệt.</div>`;
-        return;
-      }
-
-      appeals.forEach(item => {
-        box.innerHTML += `
-          <div class="bg-slate-50 p-4 rounded-xl border-l-4 border-purple-600 shadow-sm">
-            <p class="font-bold text-sm text-slate-900">Lớp ${item.className} • ${item.rule} (-${item.points}đ)</p>
-            <p class="text-xs text-slate-600 mt-1">Lý do GVCN: <b>"${item.reason}"</b></p>
-            <div class="grid grid-cols-2 gap-2 mt-3">
-              <button onclick="resolveAppeal(${item.id}, true)" class="py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-xs">Chấp nhận (Hoàn điểm)</button>
-              <button onclick="resolveAppeal(${item.id}, false)" class="py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded-lg text-xs">Từ chối</button>
-            </div>
-          </div>
-        `;
-      });
-    }
-
-    function resolveAppeal(id, isApproved) {
-      let db = getDB();
-      const target = db.find(item => item.id === id);
-      if (target) {
-        target.status = isApproved ? 'approved' : 'normal';
-        saveDB(db);
-        renderAdminData();
-      }
-    }
-
-    initSelectors();
-  </script>
-</body>
-</html>
-
+    // Vị trí cần cẩu (người thợ m
+    

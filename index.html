@@ -7,10 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
-    html, body {
-      touch-action: manipulation;
-      overscroll-behavior: none;
-    }
+    body { touch-action: manipulation; }
   </style>
 </head>
 <body class="bg-slate-950 text-white font-sans antialiased overflow-hidden select-none">
@@ -18,7 +15,7 @@
   <div class="max-w-md mx-auto h-[100dvh] flex flex-col justify-between relative bg-gradient-to-b from-sky-500 via-sky-700 to-amber-950 shadow-2xl overflow-hidden border-x border-slate-800">
     
     <!-- THANH THÔNG TIN TRÊN CÙNG -->
-    <header class="px-4 py-3 flex justify-between items-center bg-slate-900/80 backdrop-blur border-b border-white/10 z-10 shrink-0">
+    <header class="px-4 py-3 flex justify-between items-center bg-slate-900/90 backdrop-blur border-b border-white/10 z-10 shrink-0">
       <div>
         <p class="text-[10px] uppercase font-bold text-amber-300 tracking-wider">Tiền Vàng</p>
         <p class="text-xl font-black text-amber-400" id="ui-score">$0</p>
@@ -38,16 +35,16 @@
       <canvas id="gameCanvas" class="w-full h-full block"></canvas>
 
       <!-- MÀN HÌNH BẮT ĐẦU / KẾT THÚC -->
-      <div id="game-overlay" class="absolute inset-0 bg-slate-950/90 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center z-30">
-        <div class="w-20 h-20 bg-amber-500/20 text-amber-400 rounded-3xl flex items-center justify-center text-4xl mb-4 border border-amber-500/40 shadow-lg shadow-amber-500/10">
+      <div id="game-overlay" class="absolute inset-0 bg-slate-950/95 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center z-30">
+        <div class="w-20 h-20 bg-amber-500/20 text-amber-400 rounded-3xl flex items-center justify-center text-4xl mb-4 border border-amber-500/40 shadow-lg">
           <i class="fas fa-gem"></i>
         </div>
         <h2 id="overlay-title" class="text-2xl font-black tracking-tight mb-2 text-amber-400">THỢ SĂN VÀNG</h2>
         <p id="overlay-desc" class="text-xs text-slate-300 mb-6 max-w-xs leading-relaxed">
-          Canh góc móc câu quay đúng hướng và chạm màn hình để gắp vàng & kim cương. Tránh đá tảng nặng tốn thời gian!
+          Canh góc móc câu quay đúng hướng và bấm nút thả để gắp vàng & kim cương!
         </p>
         
-        <button id="btn-start" type="button" class="w-full max-w-xs py-4 bg-gradient-to-r from-amber-500 to-yellow-500 active:scale-95 text-slate-950 font-black rounded-2xl shadow-lg shadow-amber-500/25 text-base tracking-wide">
+        <button onclick="handleStartGame()" class="w-full max-w-xs py-4 bg-gradient-to-r from-amber-500 to-yellow-500 active:scale-95 text-slate-950 font-black rounded-2xl shadow-lg text-base cursor-pointer">
           BẮT ĐẦU CHƠI <i class="fas fa-play ml-1.5"></i>
         </button>
       </div>
@@ -55,7 +52,7 @@
 
     <!-- NÚT ĐIỀU KHIỂN BÊN DƯỚI -->
     <div class="p-3.5 bg-slate-950 border-t border-slate-800 flex justify-center z-10 shrink-0">
-      <button id="btn-hook" type="button" class="w-full max-w-xs py-3.5 bg-gradient-to-r from-amber-600 to-yellow-600 active:scale-95 text-white font-black rounded-2xl shadow-lg border border-amber-400/30 text-base flex items-center justify-center gap-2">
+      <button onclick="triggerHook()" class="w-full max-w-xs py-3.5 bg-gradient-to-r from-amber-600 to-yellow-600 active:scale-95 text-white font-black rounded-2xl shadow-lg border border-amber-400/30 text-base flex items-center justify-center gap-2 cursor-pointer">
         <i class="fas fa-anchor"></i> THẢ MÓC CÂU
       </button>
     </div>
@@ -67,8 +64,6 @@
     const ctx = canvas.getContext('2d');
     const container = document.getElementById('game-container');
     const overlay = document.getElementById('game-overlay');
-    const btnStart = document.getElementById('btn-start');
-    const btnHook = document.getElementById('btn-hook');
 
     let score = 0;
     let level = 1;
@@ -82,56 +77,41 @@
       x: 180,
       y: 45,
       angle: 0,
-      dir: 0.024,
+      dir: 0.025,
       length: 45,
       minLen: 45,
       maxLen: 600,
       state: 'IDLE', // IDLE | SHOOTING | RETURNING
-      speed: 7.5,
+      speed: 7,
       item: null
     };
 
     function syncDimensions() {
-      const rect = container.getBoundingClientRect();
-      canvas.width = rect.width || 360;
-      canvas.height = rect.height || 520;
+      canvas.width = container.clientWidth || 360;
+      canvas.height = container.clientHeight || 500;
       winch.x = canvas.width / 2;
       winch.maxLen = Math.hypot(canvas.width, canvas.height);
     }
 
-    function generateLevelItems(lvl) {
+    function generateItems() {
       const w = canvas.width;
       const h = canvas.height;
-      const list = [
-        // Vàng to
-        { x: w * 0.22, y: h * 0.58, r: 28, val: 150, weight: 3.0, type: 'gold', label: '$150' },
-        { x: w * 0.78, y: h * 0.65, r: 28, val: 150, weight: 3.0, type: 'gold', label: '$150' },
-        // Vàng vừa & nhỏ
-        { x: w * 0.48, y: h * 0.42, r: 18, val: 80,  weight: 1.6, type: 'gold', label: '$80' },
-        { x: w * 0.18, y: h * 0.36, r: 16, val: 60,  weight: 1.4, type: 'gold', label: '$60' },
-        { x: w * 0.82, y: h * 0.38, r: 16, val: 60,  weight: 1.4, type: 'gold', label: '$60' },
-        // Kim cương giá trị cao
-        { x: w * 0.32, y: h * 0.84, r: 14, val: 350, weight: 1.2, type: 'diamond', label: '$350' },
-        { x: w * 0.72, y: h * 0.86, r: 14, val: 350, weight: 1.2, type: 'diamond', label: '$350' },
-        // Đá cản trở
-        { x: w * 0.50, y: h * 0.64, r: 32, val: 15,  weight: 6.5, type: 'stone', label: '$15' },
-        { x: w * 0.28, y: h * 0.71, r: 24, val: 10,  weight: 5.0, type: 'stone', label: '$10' }
+      return [
+        { x: w * 0.22, y: h * 0.58, r: 26, val: 150, weight: 3.0, type: 'gold', label: '$150' },
+        { x: w * 0.78, y: h * 0.65, r: 26, val: 150, weight: 3.0, type: 'gold', label: '$150' },
+        { x: w * 0.48, y: h * 0.45, r: 18, val: 80,  weight: 1.6, type: 'gold', label: '$80' },
+        { x: w * 0.32, y: h * 0.82, r: 14, val: 350, weight: 1.2, type: 'diamond', label: '$350' },
+        { x: w * 0.72, y: h * 0.85, r: 14, val: 350, weight: 1.2, type: 'diamond', label: '$350' },
+        { x: w * 0.50, y: h * 0.68, r: 30, val: 15,  weight: 6.0, type: 'stone', label: '$15' },
+        { x: w * 0.20, y: h * 0.75, r: 22, val: 10,  weight: 4.5, type: 'stone', label: '$10' }
       ];
-      return list;
     }
 
-    function startNewGame(nextLevel = false) {
+    function handleStartGame() {
       syncDimensions();
-
-      if (!nextLevel) {
-        score = 0;
-        level = 1;
-        targetScore = 350;
-      } else {
-        level++;
-        targetScore = score + 350 + (level * 100);
-      }
-
+      score = 0;
+      level = 1;
+      targetScore = 350;
       timeLeft = 45;
       isPlaying = true;
       winch.state = 'IDLE';
@@ -144,7 +124,7 @@
       document.getElementById('ui-target').innerText = '$' + targetScore;
       document.getElementById('ui-time').innerText = timeLeft + 's';
 
-      items = generateLevelItems(level);
+      items = generateItems();
       overlay.classList.add('hidden');
 
       if (timerInterval) clearInterval(timerInterval);
@@ -153,7 +133,7 @@
         timeLeft--;
         document.getElementById('ui-time').innerText = timeLeft + 's';
         if (timeLeft <= 0) {
-          finishRound();
+          endGame();
         }
       }, 1000);
     }
@@ -165,7 +145,7 @@
       }
     }
 
-    function finishRound() {
+    function endGame() {
       isPlaying = false;
       clearInterval(timerInterval);
 
@@ -173,47 +153,22 @@
       const desc = document.getElementById('overlay-desc');
 
       if (score >= targetScore) {
-        title.innerText = `QUA MÀN ${level} THÀNH CÔNG!`;
-        title.className = "text-2xl font-black tracking-tight mb-2 text-emerald-400";
-        desc.innerText = `Tổng tiền hiện có: $${score}. Sẵn sàng chinh phục Màn ${level + 1} chưa?`;
-        btnStart.innerHTML = `CHƠI MÀN ${level + 1} <i class="fas fa-forward ml-1.5"></i>`;
-        btnStart.dataset.next = "true";
+        title.innerText = "MÀN 1 HOÀN TẤT!";
+        desc.innerText = `Em đã kiếm được $${score} vàng. Quá xuất sắc!`;
       } else {
         title.innerText = "HẾT GIỜ RỒI!";
-        title.className = "text-2xl font-black tracking-tight mb-2 text-red-400";
-        desc.innerText = `Em đạt $${score} / $${targetScore} mục tiêu. Thử lại từ đầu nhé!`;
-        btnStart.innerHTML = `CHƠI LẠI <i class="fas fa-redo ml-1.5"></i>`;
-        btnStart.dataset.next = "false";
+        desc.innerText = `Em đạt $${score} / $${targetScore}. Bấm chơi lại nhé!`;
       }
       overlay.classList.remove('hidden');
     }
 
-    // Gắn sự kiện cảm ứng & chuột chuẩn xác (không bị trễ trên mobile)
-    btnStart.addEventListener('pointerdown', (e) => {
-      e.stopPropagation();
-      const isNext = btnStart.dataset.next === "true";
-      startNewGame(isNext);
-    });
+    canvas.addEventListener('click', triggerHook);
 
-    btnHook.addEventListener('pointerdown', (e) => {
-      e.stopPropagation();
-      triggerHook();
-    });
-
-    canvas.addEventListener('pointerdown', () => {
-      triggerHook();
-    });
-
-    window.addEventListener('resize', () => {
-      if (isPlaying) syncDimensions();
-    });
-
-    // Vòng lặp vẽ và xử lý vật lý
     function gameLoop() {
       if (isPlaying) {
         if (winch.state === 'IDLE') {
           winch.angle += winch.dir;
-          if (winch.angle > 1.25 || winch.angle < -1.25) {
+          if (winch.angle > 1.2 || winch.angle < -1.2) {
             winch.dir *= -1;
           }
         } else if (winch.state === 'SHOOTING') {
@@ -235,7 +190,7 @@
             }
           }
         } else if (winch.state === 'RETURNING') {
-          const pullSpeed = winch.item ? Math.max(1.2, winch.speed / winch.item.weight) : winch.speed * 1.3;
+          const pullSpeed = winch.item ? Math.max(1, winch.speed / winch.item.weight) : winch.speed;
           winch.length -= pullSpeed;
 
           if (winch.length <= winch.minLen) {
@@ -245,33 +200,24 @@
               score += winch.item.val;
               document.getElementById('ui-score').innerText = '$' + score;
               winch.item = null;
-
-              // Nếu gắp sạch hết vàng trên bản đồ thì qua màn sớm luôn
-              if (items.filter(i => i.type !== 'stone').length === 0) {
-                finishRound();
-              }
             }
           }
         }
       }
 
-      // VẼ KHUNG CẢNH
+      // VẼ GIAO DIỆN CANVAS
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Lòng đất
       ctx.fillStyle = '#451a03';
-      ctx.fillRect(0, 75, canvas.width, canvas.height - 75);
+      ctx.fillRect(0, 70, canvas.width, canvas.height - 70);
 
-      // Đường mặt đất
       ctx.fillStyle = '#15803d';
-      ctx.fillRect(0, 70, canvas.width, 8);
+      ctx.fillRect(0, 65, canvas.width, 6);
 
-      // Vẽ các vật phẩm
       items.forEach(it => {
         ctx.save();
         ctx.beginPath();
         if (it.type === 'diamond') {
-          // Hình thoi kim cương
           ctx.moveTo(it.x, it.y - it.r);
           ctx.lineTo(it.x + it.r, it.y);
           ctx.lineTo(it.x, it.y + it.r);
@@ -279,19 +225,11 @@
           ctx.closePath();
           ctx.fillStyle = '#38bdf8';
           ctx.fill();
-          ctx.lineWidth = 2;
-          ctx.strokeStyle = '#e0f2fe';
-          ctx.stroke();
         } else {
           ctx.arc(it.x, it.y, it.r, 0, Math.PI * 2);
           ctx.fillStyle = it.type === 'gold' ? '#f59e0b' : '#64748b';
           ctx.fill();
-          ctx.lineWidth = 2.5;
-          ctx.strokeStyle = it.type === 'gold' ? '#fef08a' : '#334155';
-          ctx.stroke();
         }
-
-        // Nhãn giá tiền trên vật phẩm
         ctx.fillStyle = '#ffffff';
         ctx.font = 'bold 11px sans-serif';
         ctx.textAlign = 'center';
@@ -300,7 +238,6 @@
         ctx.restore();
       });
 
-      // Vẽ dây cáp & móc câu
       const hx = winch.x + Math.sin(winch.angle) * winch.length;
       const hy = winch.y + Math.cos(winch.angle) * winch.length;
 
@@ -311,25 +248,26 @@
       ctx.lineTo(hx, hy);
       ctx.stroke();
 
-      // Vật đang được kéo lên
       if (winch.item) {
         ctx.beginPath();
         ctx.arc(hx, hy, winch.item.r, 0, Math.PI * 2);
         ctx.fillStyle = winch.item.type === 'diamond' ? '#38bdf8' : (winch.item.type === 'gold' ? '#f59e0b' : '#64748b');
         ctx.fill();
-        ctx.strokeStyle = '#ffffff';
-        ctx.lineWidth = 2;
-        ctx.stroke();
       }
 
-      // Đầu móc câu
       ctx.fillStyle = '#e2e8f0';
       ctx.beginPath();
-      ctx.arc(hx, hy, 6, 0, Math.PI * 2);
+      ctx.arc(hx, hy, 5, 0, Math.PI * 2);
       ctx.fill();
 
-      // Máy tời ở trên mặt đất
       ctx.fillStyle = '#d97706';
-      ctx.beginPath();
-      ctx.roundRect(winch.x - 24, winch.y - 18, 48, 2
-    
+      ctx.fillRect(winch.x - 22, winch.y - 15, 44, 20);
+
+      requestAnimationFrame(gameLoop);
+    }
+
+    syncDimensions();
+    gameLoop();
+  </script>
+</body>
+</html>

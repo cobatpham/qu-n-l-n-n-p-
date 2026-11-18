@@ -3,55 +3,55 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Mini Game - Săn Vàng Cực Hay</title>
+  <title>Thợ Săn Vàng - Web Game</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
-    body { touch-action: none; }
+    body { touch-action: manipulation; }
   </style>
 </head>
-<body class="bg-amber-950 text-white font-sans antialiased overflow-hidden select-none">
+<body class="bg-slate-900 text-white font-sans antialiased overflow-hidden select-none">
 
-  <div class="max-w-md mx-auto h-screen flex flex-col justify-between relative bg-gradient-to-b from-sky-400 via-sky-600 to-amber-900 shadow-2xl overflow-hidden border-x border-amber-900">
+  <div class="max-w-md mx-auto h-screen flex flex-col justify-between relative bg-gradient-to-b from-sky-500 via-sky-700 to-amber-950 shadow-2xl overflow-hidden border-x border-slate-800">
     
-    <!-- HEADER THÔNG TIN -->
-    <header class="p-4 flex justify-between items-center bg-black/30 backdrop-blur border-b border-white/10 z-10">
+    <!-- THANH THÔNG TIN TRÊN CÙNG -->
+    <header class="p-4 flex justify-between items-center bg-black/40 backdrop-blur border-b border-white/10 z-10">
       <div>
-        <p class="text-[10px] uppercase font-bold text-amber-200">Tiền vàng</p>
-        <p class="text-2xl font-black text-amber-300" id="score-val">$0</p>
+        <p class="text-[10px] uppercase font-bold text-amber-300">Tiền Vàng</p>
+        <p class="text-2xl font-black text-amber-400" id="ui-score">$0</p>
       </div>
       <div class="text-center">
-        <p class="text-[10px] uppercase font-bold text-amber-200">Mục tiêu</p>
-        <p class="text-lg font-bold text-white" id="target-val">$300</p>
+        <p class="text-[10px] uppercase font-bold text-amber-300">Mục Tiêu</p>
+        <p class="text-lg font-bold text-white" id="ui-target">$300</p>
       </div>
       <div class="text-right">
-        <p class="text-[10px] uppercase font-bold text-amber-200">Thời gian</p>
-        <p class="text-xl font-black text-red-300" id="time-val">45s</p>
+        <p class="text-[10px] uppercase font-bold text-amber-300">Thời Gian</p>
+        <p class="text-xl font-black text-red-400" id="ui-time">45s</p>
       </div>
     </header>
 
-    <!-- KHUNG TRÒ CHƠI (CANVAS) -->
-    <div class="relative flex-1 overflow-hidden cursor-pointer" id="game-container" onclick="fireHook()">
-      <canvas id="gameCanvas" class="absolute inset-0 w-full h-full"></canvas>
+    <!-- KHUNG CHƠI GAME -->
+    <div class="relative flex-1 overflow-hidden" id="game-container">
+      <canvas id="gameCanvas" class="absolute inset-0 w-full h-full block"></canvas>
 
-      <!-- MÀN HÌNH BẮT ĐẦU / KẾT THÚC -->
-      <div id="game-overlay" class="absolute inset-0 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center z-20">
+      <!-- MENU BẮT ĐẦU / KẾT THÚC -->
+      <div id="game-overlay" class="absolute inset-0 bg-black/85 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center z-20">
         <div class="w-20 h-20 bg-amber-500/20 text-amber-400 rounded-3xl flex items-center justify-center text-4xl mb-4 border border-amber-500/30 shadow-lg">
           <i class="fas fa-gem"></i>
         </div>
         <h2 id="overlay-title" class="text-2xl font-black tracking-tight mb-2">THỢ SĂN VÀNG</h2>
-        <p id="overlay-desc" class="text-xs text-slate-300 mb-6 max-w-xs">Chạm vào màn hình hoặc bấm nút phía dưới để phóng móc câu gắp vàng và kho báu!</p>
+        <p id="overlay-desc" class="text-xs text-slate-300 mb-6 max-w-xs">Bấm nút bên dưới để bắt đầu thả móc câu gắp vàng!</p>
         
-        <button onclick="startGame()" class="w-full max-w-xs py-4 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 active:scale-95 text-slate-950 font-black rounded-2xl shadow-lg transition text-base">
-          BẮT ĐẦU ĐÀO <i class="fas fa-play ml-1"></i>
+        <button onclick="initGame()" class="w-full max-w-xs py-4 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 active:scale-95 text-slate-950 font-black rounded-2xl shadow-lg transition text-base">
+          CHƠI NGAY <i class="fas fa-play ml-1"></i>
         </button>
       </div>
     </div>
 
-    <!-- ĐIỀU KHIỂN NÚT BẤM DƯỚI ĐÁY -->
-    <div class="p-4 bg-amber-950/90 border-t border-amber-900 flex justify-center z-10">
+    <!-- NÚT ĐIỀU KHIỂN BÊN DƯỚI -->
+    <div class="p-4 bg-slate-950 border-t border-slate-800 flex justify-center z-10">
       <button onclick="fireHook()" class="w-full max-w-xs py-4 bg-gradient-to-r from-amber-600 to-yellow-600 active:scale-95 text-white font-black rounded-2xl shadow-lg border border-amber-400/30 text-lg flex items-center justify-center gap-2">
-        <i class="fas fa-anchor"></i> PHÓNG MÓC CÂU
+        <i class="fas fa-anchor"></i> THẢ MÓC CÂU
       </button>
     </div>
 
@@ -59,20 +59,5 @@
 
   <script>
     const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
-
-    function resizeCanvas() {
-      canvas.width = canvas.parentElement.clientWidth;
-      canvas.height = canvas.parentElement.clientHeight;
-    }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
-    let score = 0;
-    let targetScore = 300;
-    let timeLeft = 45;
-    let isPlaying = false;
-    let timerInterval;
-
-    // Vị trí cần cẩu (người thợ m
-    
+    const ctx = canvas.getContext('2
+                                  

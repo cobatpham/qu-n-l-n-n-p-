@@ -53,15 +53,13 @@
       <div id="accounts-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
     </section>
 
-    <!-- TOPUP (NẠP TIỀN QUA QR CHÍNH CHỦ & CHỜ DUYỆT) -->
+    <!-- TOPUP -->
     <section id="page-topup" class="hidden space-y-4">
       <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-4 text-xs">
         <h2 class="font-black text-emerald-400 text-sm"><i class="fas fa-qrcode mr-1.5"></i>Nạp Tiền Qua Mã QR (MB Bank)</h2>
         
-        <!-- Khung hiển thị mã QR chính chủ -->
         <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 flex flex-col items-center text-center space-y-3">
           <div class="bg-white p-3 rounded-xl shadow-lg">
-            <!-- Sử dụng ảnh QR code chính chủ của user -->
             <img src="https://i.imgur.com/8QzXJ2j.png" alt="QR Code MB Bank" class="w-48 h-48 object-contain rounded-lg">
           </div>
           <div class="space-y-1">
@@ -72,7 +70,6 @@
           </div>
         </div>
 
-        <!-- Form tạo lệnh nạp từ 50k đến 1 tỷ -->
         <form onsubmit="doCreateTopup(event)" class="space-y-3">
           <div>
             <label class="block font-bold text-slate-300 mb-1">Nhập số tiền muốn nạp (Từ 50.000đ đến 1.000.000.000đ):</label>
@@ -84,7 +81,6 @@
         </form>
       </div>
 
-      <!-- Lịch sử nạp tiền của user -->
       <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-3">
         <h3 class="font-black text-slate-300 text-xs uppercase">Lịch Sử Nạp Tiền & Trạng Thái</h3>
         <div id="topup-history" class="space-y-2"></div>
@@ -99,7 +95,7 @@
       </div>
     </section>
 
-    <!-- ADMIN (QUẢN TRỊ DUYỆT TIỀN & ĐĂNG ACC) -->
+    <!-- ADMIN -->
     <section id="page-admin" class="hidden space-y-4">
       <div class="bg-slate-900 border border-amber-500/40 rounded-2xl p-4 space-y-3 text-xs">
         <h2 class="font-black text-amber-400 text-sm"><i class="fas fa-wallet mr-1"></i>Duyệt Lệnh Nạp Tiền Của Khách</h2>
@@ -274,7 +270,6 @@
       go('history');
     }
 
-    // TẠO LỆNH NẠP TIỀN CHỜ DUYỆT
     function doCreateTopup(e) {
       e.preventDefault();
       const u = curr();
@@ -286,7 +281,7 @@
         id: 'TP' + Math.floor(1000 + Math.random() * 9000),
         user: u.u,
         amount: amt,
-        status: 'pending', // pending, approved, rejected
+        status: 'pending',
         time: new Date().toLocaleString('vi-VN')
       });
       setTopups(topups);
@@ -312,7 +307,6 @@
       }).join('') || '<p class="text-slate-500 text-xs">Chưa có lệnh nạp tiền nào.</p>';
     }
 
-    // ADMIN DUYỆT HOẶC TỪ CHỐI LỆNH NẠP
     function renderAdminTopups() {
       const topups = getTopups();
       document.getElementById('admin-topup-list').innerHTML = topups.map(t => {
@@ -380,4 +374,18 @@
         title: document.getElementById('adm-title').value.trim(),
         price: parseInt(document.getElementById('adm-price').value),
         skins: document.getElementById('adm-skins').value.trim(),
-        user: document.getElem
+        user: document.getElementById('adm-user').value.trim(),
+        pass: document.getElementById('adm-pass').value.trim(),
+        sold: false
+      });
+      setAccs(accs);
+      e.target.reset();
+      alert('Đăng bán thành công!');
+      go('home');
+      render();
+    }
+
+    init();
+  </script>
+</body>
+</html>

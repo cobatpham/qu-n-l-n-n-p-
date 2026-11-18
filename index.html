@@ -3,54 +3,59 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Thợ Săn Vàng - Web Game</title>
+  <title>Thợ Săn Vàng - Gold Miner</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
-    body { touch-action: manipulation; }
+    html, body {
+      touch-action: manipulation;
+      overscroll-behavior: none;
+    }
   </style>
 </head>
-<body class="bg-slate-900 text-white font-sans antialiased overflow-hidden select-none">
+<body class="bg-slate-950 text-white font-sans antialiased overflow-hidden select-none">
 
-  <div class="max-w-md mx-auto h-screen flex flex-col justify-between relative bg-gradient-to-b from-sky-500 via-sky-700 to-amber-950 shadow-2xl overflow-hidden border-x border-slate-800">
+  <div class="max-w-md mx-auto h-[100dvh] flex flex-col justify-between relative bg-gradient-to-b from-sky-500 via-sky-700 to-amber-950 shadow-2xl overflow-hidden border-x border-slate-800">
     
     <!-- THANH THÔNG TIN TRÊN CÙNG -->
-    <header class="p-4 flex justify-between items-center bg-black/40 backdrop-blur border-b border-white/10 z-10">
+    <header class="px-4 py-3 flex justify-between items-center bg-slate-900/80 backdrop-blur border-b border-white/10 z-10 shrink-0">
       <div>
-        <p class="text-[10px] uppercase font-bold text-amber-300">Tiền Vàng</p>
-        <p class="text-2xl font-black text-amber-400" id="ui-score">$0</p>
+        <p class="text-[10px] uppercase font-bold text-amber-300 tracking-wider">Tiền Vàng</p>
+        <p class="text-xl font-black text-amber-400" id="ui-score">$0</p>
       </div>
       <div class="text-center">
-        <p class="text-[10px] uppercase font-bold text-amber-300">Mục Tiêu</p>
-        <p class="text-lg font-bold text-white" id="ui-target">$300</p>
+        <span class="text-[10px] bg-amber-500/20 text-amber-300 border border-amber-400/30 px-2 py-0.5 rounded-full font-bold" id="ui-level">MÀN 1</span>
+        <p class="text-xs font-bold text-white mt-1">Mục tiêu: <span class="text-emerald-400" id="ui-target">$350</span></p>
       </div>
       <div class="text-right">
-        <p class="text-[10px] uppercase font-bold text-amber-300">Thời Gian</p>
+        <p class="text-[10px] uppercase font-bold text-amber-300 tracking-wider">Thời Gian</p>
         <p class="text-xl font-black text-red-400" id="ui-time">45s</p>
       </div>
     </header>
 
     <!-- KHUNG CHƠI GAME -->
-    <div class="relative flex-1 overflow-hidden" id="game-container">
-      <canvas id="gameCanvas" class="absolute inset-0 w-full h-full block"></canvas>
+    <div class="relative flex-1 w-full overflow-hidden" id="game-container">
+      <canvas id="gameCanvas" class="w-full h-full block"></canvas>
 
-      <!-- MENU BẮT ĐẦU / KẾT THÚC -->
-      <div id="game-overlay" class="absolute inset-0 bg-black/85 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center z-20">
-        <div class="w-20 h-20 bg-amber-500/20 text-amber-400 rounded-3xl flex items-center justify-center text-4xl mb-4 border border-amber-500/30 shadow-lg">
+      <!-- MÀN HÌNH BẮT ĐẦU / KẾT THÚC -->
+      <div id="game-overlay" class="absolute inset-0 bg-slate-950/90 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center z-30">
+        <div class="w-20 h-20 bg-amber-500/20 text-amber-400 rounded-3xl flex items-center justify-center text-4xl mb-4 border border-amber-500/40 shadow-lg shadow-amber-500/10">
           <i class="fas fa-gem"></i>
         </div>
-        <h2 id="overlay-title" class="text-2xl font-black tracking-tight mb-2">THỢ SĂN VÀNG</h2>
-        <p id="overlay-desc" class="text-xs text-slate-300 mb-6 max-w-xs">Bấm nút bên dưới để bắt đầu thả móc câu gắp vàng!</p>
+        <h2 id="overlay-title" class="text-2xl font-black tracking-tight mb-2 text-amber-400">THỢ SĂN VÀNG</h2>
+        <p id="overlay-desc" class="text-xs text-slate-300 mb-6 max-w-xs leading-relaxed">
+          Canh góc móc câu quay đúng hướng và chạm màn hình để gắp vàng & kim cương. Tránh đá tảng nặng tốn thời gian!
+        </p>
         
-        <button onclick="initGame()" class="w-full max-w-xs py-4 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 active:scale-95 text-slate-950 font-black rounded-2xl shadow-lg transition text-base">
-          CHƠI NGAY <i class="fas fa-play ml-1"></i>
+        <button id="btn-start" type="button" class="w-full max-w-xs py-4 bg-gradient-to-r from-amber-500 to-yellow-500 active:scale-95 text-slate-950 font-black rounded-2xl shadow-lg shadow-amber-500/25 text-base tracking-wide">
+          BẮT ĐẦU CHƠI <i class="fas fa-play ml-1.5"></i>
         </button>
       </div>
     </div>
 
     <!-- NÚT ĐIỀU KHIỂN BÊN DƯỚI -->
-    <div class="p-4 bg-slate-950 border-t border-slate-800 flex justify-center z-10">
-      <button onclick="fireHook()" class="w-full max-w-xs py-4 bg-gradient-to-r from-amber-600 to-yellow-600 active:scale-95 text-white font-black rounded-2xl shadow-lg border border-amber-400/30 text-lg flex items-center justify-center gap-2">
+    <div class="p-3.5 bg-slate-950 border-t border-slate-800 flex justify-center z-10 shrink-0">
+      <button id="btn-hook" type="button" class="w-full max-w-xs py-3.5 bg-gradient-to-r from-amber-600 to-yellow-600 active:scale-95 text-white font-black rounded-2xl shadow-lg border border-amber-400/30 text-base flex items-center justify-center gap-2">
         <i class="fas fa-anchor"></i> THẢ MÓC CÂU
       </button>
     </div>
@@ -59,5 +64,272 @@
 
   <script>
     const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2
-                                  
+    const ctx = canvas.getContext('2d');
+    const container = document.getElementById('game-container');
+    const overlay = document.getElementById('game-overlay');
+    const btnStart = document.getElementById('btn-start');
+    const btnHook = document.getElementById('btn-hook');
+
+    let score = 0;
+    let level = 1;
+    let targetScore = 350;
+    let timeLeft = 45;
+    let isPlaying = false;
+    let timerInterval = null;
+    let items = [];
+
+    const winch = {
+      x: 180,
+      y: 45,
+      angle: 0,
+      dir: 0.024,
+      length: 45,
+      minLen: 45,
+      maxLen: 600,
+      state: 'IDLE', // IDLE | SHOOTING | RETURNING
+      speed: 7.5,
+      item: null
+    };
+
+    function syncDimensions() {
+      const rect = container.getBoundingClientRect();
+      canvas.width = rect.width || 360;
+      canvas.height = rect.height || 520;
+      winch.x = canvas.width / 2;
+      winch.maxLen = Math.hypot(canvas.width, canvas.height);
+    }
+
+    function generateLevelItems(lvl) {
+      const w = canvas.width;
+      const h = canvas.height;
+      const list = [
+        // Vàng to
+        { x: w * 0.22, y: h * 0.58, r: 28, val: 150, weight: 3.0, type: 'gold', label: '$150' },
+        { x: w * 0.78, y: h * 0.65, r: 28, val: 150, weight: 3.0, type: 'gold', label: '$150' },
+        // Vàng vừa & nhỏ
+        { x: w * 0.48, y: h * 0.42, r: 18, val: 80,  weight: 1.6, type: 'gold', label: '$80' },
+        { x: w * 0.18, y: h * 0.36, r: 16, val: 60,  weight: 1.4, type: 'gold', label: '$60' },
+        { x: w * 0.82, y: h * 0.38, r: 16, val: 60,  weight: 1.4, type: 'gold', label: '$60' },
+        // Kim cương giá trị cao
+        { x: w * 0.32, y: h * 0.84, r: 14, val: 350, weight: 1.2, type: 'diamond', label: '$350' },
+        { x: w * 0.72, y: h * 0.86, r: 14, val: 350, weight: 1.2, type: 'diamond', label: '$350' },
+        // Đá cản trở
+        { x: w * 0.50, y: h * 0.64, r: 32, val: 15,  weight: 6.5, type: 'stone', label: '$15' },
+        { x: w * 0.28, y: h * 0.71, r: 24, val: 10,  weight: 5.0, type: 'stone', label: '$10' }
+      ];
+      return list;
+    }
+
+    function startNewGame(nextLevel = false) {
+      syncDimensions();
+
+      if (!nextLevel) {
+        score = 0;
+        level = 1;
+        targetScore = 350;
+      } else {
+        level++;
+        targetScore = score + 350 + (level * 100);
+      }
+
+      timeLeft = 45;
+      isPlaying = true;
+      winch.state = 'IDLE';
+      winch.length = winch.minLen;
+      winch.angle = 0;
+      winch.item = null;
+
+      document.getElementById('ui-score').innerText = '$' + score;
+      document.getElementById('ui-level').innerText = 'MÀN ' + level;
+      document.getElementById('ui-target').innerText = '$' + targetScore;
+      document.getElementById('ui-time').innerText = timeLeft + 's';
+
+      items = generateLevelItems(level);
+      overlay.classList.add('hidden');
+
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        if (!isPlaying) return;
+        timeLeft--;
+        document.getElementById('ui-time').innerText = timeLeft + 's';
+        if (timeLeft <= 0) {
+          finishRound();
+        }
+      }, 1000);
+    }
+
+    function triggerHook() {
+      if (!isPlaying) return;
+      if (winch.state === 'IDLE') {
+        winch.state = 'SHOOTING';
+      }
+    }
+
+    function finishRound() {
+      isPlaying = false;
+      clearInterval(timerInterval);
+
+      const title = document.getElementById('overlay-title');
+      const desc = document.getElementById('overlay-desc');
+
+      if (score >= targetScore) {
+        title.innerText = `QUA MÀN ${level} THÀNH CÔNG!`;
+        title.className = "text-2xl font-black tracking-tight mb-2 text-emerald-400";
+        desc.innerText = `Tổng tiền hiện có: $${score}. Sẵn sàng chinh phục Màn ${level + 1} chưa?`;
+        btnStart.innerHTML = `CHƠI MÀN ${level + 1} <i class="fas fa-forward ml-1.5"></i>`;
+        btnStart.dataset.next = "true";
+      } else {
+        title.innerText = "HẾT GIỜ RỒI!";
+        title.className = "text-2xl font-black tracking-tight mb-2 text-red-400";
+        desc.innerText = `Em đạt $${score} / $${targetScore} mục tiêu. Thử lại từ đầu nhé!`;
+        btnStart.innerHTML = `CHƠI LẠI <i class="fas fa-redo ml-1.5"></i>`;
+        btnStart.dataset.next = "false";
+      }
+      overlay.classList.remove('hidden');
+    }
+
+    // Gắn sự kiện cảm ứng & chuột chuẩn xác (không bị trễ trên mobile)
+    btnStart.addEventListener('pointerdown', (e) => {
+      e.stopPropagation();
+      const isNext = btnStart.dataset.next === "true";
+      startNewGame(isNext);
+    });
+
+    btnHook.addEventListener('pointerdown', (e) => {
+      e.stopPropagation();
+      triggerHook();
+    });
+
+    canvas.addEventListener('pointerdown', () => {
+      triggerHook();
+    });
+
+    window.addEventListener('resize', () => {
+      if (isPlaying) syncDimensions();
+    });
+
+    // Vòng lặp vẽ và xử lý vật lý
+    function gameLoop() {
+      if (isPlaying) {
+        if (winch.state === 'IDLE') {
+          winch.angle += winch.dir;
+          if (winch.angle > 1.25 || winch.angle < -1.25) {
+            winch.dir *= -1;
+          }
+        } else if (winch.state === 'SHOOTING') {
+          winch.length += winch.speed;
+          const hx = winch.x + Math.sin(winch.angle) * winch.length;
+          const hy = winch.y + Math.cos(winch.angle) * winch.length;
+
+          if (winch.length >= winch.maxLen || hx <= 5 || hx >= canvas.width - 5 || hy >= canvas.height - 5) {
+            winch.state = 'RETURNING';
+          }
+
+          for (let i = items.length - 1; i >= 0; i--) {
+            const it = items[i];
+            if (Math.hypot(hx - it.x, hy - it.y) <= it.r + 8) {
+              winch.item = it;
+              items.splice(i, 1);
+              winch.state = 'RETURNING';
+              break;
+            }
+          }
+        } else if (winch.state === 'RETURNING') {
+          const pullSpeed = winch.item ? Math.max(1.2, winch.speed / winch.item.weight) : winch.speed * 1.3;
+          winch.length -= pullSpeed;
+
+          if (winch.length <= winch.minLen) {
+            winch.length = winch.minLen;
+            winch.state = 'IDLE';
+            if (winch.item) {
+              score += winch.item.val;
+              document.getElementById('ui-score').innerText = '$' + score;
+              winch.item = null;
+
+              // Nếu gắp sạch hết vàng trên bản đồ thì qua màn sớm luôn
+              if (items.filter(i => i.type !== 'stone').length === 0) {
+                finishRound();
+              }
+            }
+          }
+        }
+      }
+
+      // VẼ KHUNG CẢNH
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Lòng đất
+      ctx.fillStyle = '#451a03';
+      ctx.fillRect(0, 75, canvas.width, canvas.height - 75);
+
+      // Đường mặt đất
+      ctx.fillStyle = '#15803d';
+      ctx.fillRect(0, 70, canvas.width, 8);
+
+      // Vẽ các vật phẩm
+      items.forEach(it => {
+        ctx.save();
+        ctx.beginPath();
+        if (it.type === 'diamond') {
+          // Hình thoi kim cương
+          ctx.moveTo(it.x, it.y - it.r);
+          ctx.lineTo(it.x + it.r, it.y);
+          ctx.lineTo(it.x, it.y + it.r);
+          ctx.lineTo(it.x - it.r, it.y);
+          ctx.closePath();
+          ctx.fillStyle = '#38bdf8';
+          ctx.fill();
+          ctx.lineWidth = 2;
+          ctx.strokeStyle = '#e0f2fe';
+          ctx.stroke();
+        } else {
+          ctx.arc(it.x, it.y, it.r, 0, Math.PI * 2);
+          ctx.fillStyle = it.type === 'gold' ? '#f59e0b' : '#64748b';
+          ctx.fill();
+          ctx.lineWidth = 2.5;
+          ctx.strokeStyle = it.type === 'gold' ? '#fef08a' : '#334155';
+          ctx.stroke();
+        }
+
+        // Nhãn giá tiền trên vật phẩm
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 11px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(it.label, it.x, it.y);
+        ctx.restore();
+      });
+
+      // Vẽ dây cáp & móc câu
+      const hx = winch.x + Math.sin(winch.angle) * winch.length;
+      const hy = winch.y + Math.cos(winch.angle) * winch.length;
+
+      ctx.strokeStyle = '#fde047';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(winch.x, winch.y);
+      ctx.lineTo(hx, hy);
+      ctx.stroke();
+
+      // Vật đang được kéo lên
+      if (winch.item) {
+        ctx.beginPath();
+        ctx.arc(hx, hy, winch.item.r, 0, Math.PI * 2);
+        ctx.fillStyle = winch.item.type === 'diamond' ? '#38bdf8' : (winch.item.type === 'gold' ? '#f59e0b' : '#64748b');
+        ctx.fill();
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      }
+
+      // Đầu móc câu
+      ctx.fillStyle = '#e2e8f0';
+      ctx.beginPath();
+      ctx.arc(hx, hy, 6, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Máy tời ở trên mặt đất
+      ctx.fillStyle = '#d97706';
+      ctx.beginPath();
+      ctx.roundRect(winch.x - 24, winch.y - 18, 48, 2
+    

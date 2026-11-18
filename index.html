@@ -3,37 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DELTASHOP VN - Shop Acc Delta Force</title>
+  <title>DELTASHOP - Delta Force VN</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans antialiased">
-
-  <!-- HEADER -->
+<body class="bg-slate-950 text-slate-100 font-sans">
   <header class="sticky top-0 z-50 bg-slate-900 border-b border-slate-800 shadow-xl">
     <div class="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
       <div onclick="go('home')" class="flex items-center gap-2 cursor-pointer">
-        <div class="w-8 h-8 rounded-lg bg-emerald-500 text-slate-950 flex items-center justify-center font-black">
-          <i class="fas fa-crosshairs"></i>
-        </div>
+        <div class="w-8 h-8 rounded-lg bg-emerald-500 text-slate-950 flex items-center justify-center font-black"><i class="fas fa-crosshairs"></i></div>
         <span class="font-black text-sm tracking-tight text-white">DELTA<span class="text-emerald-400">SHOP</span></span>
       </div>
-
       <div id="auth-guest" class="flex items-center gap-2">
         <button onclick="openAuth('login')" class="px-3 py-1.5 rounded-lg bg-slate-800 text-xs font-bold border border-slate-700">Đăng Nhập</button>
         <button onclick="openAuth('reg')" class="px-3 py-1.5 rounded-lg bg-emerald-500 text-slate-950 text-xs font-black">Đăng Ký</button>
       </div>
-
       <div id="auth-user" class="hidden flex items-center gap-2">
-        <button onclick="go('topup')" class="bg-slate-800 border border-emerald-500/40 px-2.5 py-1 rounded-lg text-xs font-black text-emerald-400">
-          <i class="fas fa-wallet mr-1"></i><span id="user-balance">0đ</span>
-        </button>
+        <button onclick="go('topup')" class="bg-slate-800 border border-emerald-500/40 px-2.5 py-1 rounded-lg text-xs font-black text-emerald-400"><i class="fas fa-wallet mr-1"></i><span id="user-balance">0đ</span></button>
         <button onclick="doLogout()" class="p-1.5 rounded-lg bg-red-500/20 text-red-400 text-xs"><i class="fas fa-sign-out-alt"></i></button>
       </div>
     </div>
-
     <nav class="bg-slate-900 border-t border-slate-800 flex justify-around py-2 text-xs font-bold text-slate-400">
-      <button onclick="go('home')" class="hover:text-emerald-400"><i class="fas fa-store mr-1 text-emerald-400"></i>Shop Acc</button>
+      <button onclick="go('home')" class="hover:text-emerald-400"><i class="fas fa-store mr-1 text-emerald-400"></i>Shop</button>
       <button onclick="go('wheel')" class="hover:text-emerald-400"><i class="fas fa-dharmachakra mr-1 text-amber-400"></i>Vòng Quay</button>
       <button onclick="go('topup')" class="hover:text-emerald-400"><i class="fas fa-coins mr-1 text-yellow-400"></i>Nạp Tiền</button>
       <button onclick="go('history')" class="hover:text-emerald-400"><i class="fas fa-key mr-1 text-cyan-400"></i>Đã Mua</button>
@@ -41,42 +32,33 @@
     </nav>
   </header>
 
-  <!-- MAIN -->
   <main class="max-w-4xl mx-auto px-4 py-4 space-y-4">
-
-    <!-- HOME -->
     <section id="page-home" class="space-y-4">
       <div class="bg-gradient-to-r from-slate-900 via-emerald-950 to-slate-900 border border-emerald-500/30 rounded-2xl p-4">
         <h1 class="text-base font-black text-white">SHOP ACC <span class="text-emerald-400">DELTA FORCE VN</span></h1>
-        <p class="text-xs text-slate-300 mt-1">Đăng ký mới nhận ngay <b class="text-emerald-400">50.000đ</b> vào ví trải nghiệm!</p>
+        <p class="text-xs text-slate-300 mt-1">Đăng ký mới nhận ngay <b class="text-emerald-400">50.000đ</b> vào ví!</p>
       </div>
       <div id="accounts-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
     </section>
 
-    <!-- VÒNG QUAY -->
     <section id="page-wheel" class="hidden space-y-3">
       <div class="bg-slate-900 border border-amber-500/30 rounded-2xl p-4 text-center space-y-3">
         <h2 class="font-black text-amber-400 text-sm"><i class="fas fa-dharmachakra mr-1"></i>Vòng Quay May Mắn (20k/lượt)</h2>
-        <p class="text-xs text-slate-300">Tỷ lệ: <b>25% Trúng Acc VIP</b> | <b>75% Trúng Acc Cùi</b></p>
+        <p class="text-xs text-slate-300">Tỷ lệ: <b>25% VIP</b> | <b>75% Cùi</b></p>
         <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3">
-          <div id="wheel-result" class="text-xs font-bold text-slate-300 min-h-[35px] flex items-center justify-center">
-            Bấm quay để nhận tài khoản ngay!
-          </div>
+          <div id="wheel-result" class="text-xs font-bold text-slate-300 min-h-[35px] flex items-center justify-center">Bấm quay để nhận tài khoản ngay!</div>
           <button onclick="doSpinWheel()" class="w-full py-3 bg-amber-500 text-slate-950 font-black rounded-xl text-xs">QUAY NGAY (20.000Đ)</button>
         </div>
       </div>
     </section>
 
-    <!-- TOPUP -->
     <section id="page-topup" class="hidden space-y-3">
       <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-3 text-xs">
         <h2 class="font-black text-emerald-400 text-sm"><i class="fas fa-qrcode mr-1"></i>Nạp Tiền Qua QR (MB Bank)</h2>
         <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 flex flex-col items-center text-center space-y-2">
-          <div class="bg-white p-2 rounded-xl">
-            <img src="https://img.vietqr.io/image/MB-0399922379-compact2.png?amount=0&addInfo=NAPTIEN&accountName=DINH%20HOANG%20MANH" alt="QR" class="w-40 h-40 object-contain">
-          </div>
+          <div class="bg-white p-2 rounded-xl"><img src="https://img.vietqr.io/image/MB-0399922379-compact2.png?amount=0&addInfo=NAPTIEN&accountName=DINH%20HOANG%20MANH" alt="QR" class="w-40 h-40 object-contain"></div>
           <p class="font-bold text-slate-300">STK: <span class="text-amber-400 select-all font-black">0399922379</span> (DINH HOANG MANH)</p>
-          <p class="text-[11px] text-slate-400">Nội dung CK: <b id="qr-memo" class="text-white bg-slate-900 px-2 py-0.5 rounded">NAPTIEN</b></p>
+          <p class="text-[11px] text-slate-400">Nội dung: <b id="qr-memo" class="text-white bg-slate-900 px-2 py-0.5 rounded">NAPTIEN</b></p>
         </div>
         <form onsubmit="doCreateTopup(event)" class="space-y-2.5">
           <input type="number" id="topup-amount" min="50000" max="1000000000" step="1000" required placeholder="Nhập số tiền (50k - 1 tỷ)..." class="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-emerald-400 font-bold">
@@ -89,15 +71,13 @@
       </div>
     </section>
 
-    <!-- HISTORY -->
     <section id="page-history" class="hidden">
       <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-3">
-        <h2 class="font-black text-white text-sm"><i class="fas fa-key text-emerald-400 mr-1"></i>Tài Khoản Đã Mua & Trúng Thưởng</h2>
+        <h2 class="font-black text-white text-sm"><i class="fas fa-key text-emerald-400 mr-1"></i>Đã Mua & Trúng Thưởng</h2>
         <div id="purchased-logs" class="space-y-2"></div>
       </div>
     </section>
 
-    <!-- ADMIN -->
     <section id="page-admin" class="hidden space-y-3">
       <div class="bg-slate-900 border border-amber-500/40 rounded-2xl p-4 space-y-3 text-xs">
         <h2 class="font-black text-amber-400 text-sm">Duyệt Lệnh Nạp Tiền</h2>
@@ -107,7 +87,7 @@
         <h2 class="font-black text-amber-400 text-sm">Đăng Bán Acc</h2>
         <form onsubmit="doAddAcc(event)" class="space-y-2">
           <input type="text" id="adm-title" required placeholder="Tiêu đề..." class="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white">
-          <input type="number" id="adm-price" required placeholder="Giá (VNĐ)..." class="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-emerald-400 font-bold">
+          <input type="number" id="adm-price" required placeholder="Giá..." class="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-emerald-400 font-bold">
           <input type="text" id="adm-skins" required placeholder="Skins..." class="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white">
           <input type="text" id="adm-user" required placeholder="User..." class="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white">
           <input type="text" id="adm-pass" required placeholder="Pass..." class="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white">
@@ -115,10 +95,8 @@
         </form>
       </div>
     </section>
-
   </main>
 
-  <!-- AUTH MODAL -->
   <div id="auth-modal" class="hidden fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
     <div class="bg-slate-900 border border-slate-700 w-full max-w-xs rounded-2xl p-4 relative space-y-3">
       <button onclick="document.getElementById('auth-modal').classList.add('hidden')" class="absolute top-3 right-3 text-slate-400"><i class="fas fa-times"></i></button>
@@ -140,22 +118,16 @@
   </div>
 
   <script>
-    const US_K = 'df_u_v6', AC_K = 'df_a_v6', TP_K = 'df_t_v6', CR_K = 'df_c_v6';
-
+    const US_K = 'df_u_v8', AC_K = 'df_a_v8', TP_K = 'df_t_v8', CR_K = 'df_c_v8';
     function init() {
-      if (!localStorage.getItem(US_K)) {
-        localStorage.setItem(US_K, JSON.stringify([{ u: 'admin', p: '123456', bal: 2000000, role: 'admin', bought: [] }]));
-      }
-      if (!localStorage.getItem(AC_K)) {
-        localStorage.setItem(AC_K, JSON.stringify([
-          { id: '101', title: 'Acc VIP M7 Spectrum + Dao Dark Star', price: 350000, skins: 'M7 Spectrum, Dao Dark Star', user: 'acc_vips1', pass: 'pass123', sold: false },
-          { id: '102', title: 'Acc Rank Marshal Full Đặc Nhiệm', price: 180000, skins: 'AUG Cyber, 15M Tekniq', user: 'acc_vips2', pass: 'pass456', sold: false }
-        ]));
-      }
+      if (!localStorage.getItem(US_K)) localStorage.setItem(US_K, JSON.stringify([{ u: 'admin', p: '123456', bal: 2000000, role: 'admin', bought: [] }]));
+      if (!localStorage.getItem(AC_K)) localStorage.setItem(AC_K, JSON.stringify([
+        { id: '101', title: 'Acc VIP M7 Spectrum + Dao Dark Star', price: 350000, skins: 'M7 Spectrum, Dao Dark Star', user: 'acc_vips1', pass: 'pass123', sold: false },
+        { id: '102', title: 'Acc Rank Marshal Full Đặc Nhiệm', price: 180000, skins: 'AUG Cyber, 15M Tekniq', user: 'acc_vips2', pass: 'pass456', sold: false }
+      ]));
       if (!localStorage.getItem(TP_K)) localStorage.setItem(TP_K, JSON.stringify([]));
       render();
     }
-
     const getUsers = () => JSON.parse(localStorage.getItem(US_K)) || [];
     const setUsers = (d) => localStorage.setItem(US_K, JSON.stringify(d));
     const getAccs = () => JSON.parse(localStorage.getItem(AC_K)) || [];
@@ -173,9 +145,7 @@
       document.getElementById('tab-l').className = isL ? 'text-emerald-400' : 'text-slate-400';
       document.getElementById('tab-r').className = !isL ? 'text-emerald-400' : 'text-slate-400';
     }
-
     function switchAuth(m) { openAuth(m === 'l' ? 'login' : 'reg'); }
-
     function doReg(e) {
       e.preventDefault();
       const u = document.getElementById('r-u').value.trim().toLowerCase();
@@ -183,13 +153,10 @@
       const users = getUsers();
       if (users.some(x => x.u === u)) return alert('Tài khoản đã tồn tại!');
       users.push({ u, p, bal: 50000, role: 'member', bought: [] });
-      setUsers(users);
-      localStorage.setItem(CR_K, u);
+      setUsers(users); localStorage.setItem(CR_K, u);
       document.getElementById('auth-modal').classList.add('hidden');
-      render();
-      alert('Đăng ký thành công! Tặng 50.000đ.');
+      render(); alert('Đăng ký thành công! Tặng 50.000đ.');
     }
-
     function doLogin(e) {
       e.preventDefault();
       const u = document.getElementById('l-u').value.trim().toLowerCase();
@@ -200,34 +167,23 @@
       document.getElementById('auth-modal').classList.add('hidden');
       render();
     }
-
-    function doLogout() {
-      localStorage.removeItem(CR_K);
-      go('home');
-      render();
-    }
-
+    function doLogout() { localStorage.removeItem(CR_K); go('home'); render(); }
     function go(p) {
       const u = curr();
       if ((p === 'topup' || p === 'history' || p === 'wheel') && !u) return openAuth('login');
       if (p === 'admin' && (!u || u.role !== 'admin')) return alert('Chỉ Admin!');
       ['home', 'wheel', 'topup', 'history', 'admin'].forEach(id => document.getElementById('page-' + id).classList.add('hidden'));
       document.getElementById('page-' + p).classList.remove('hidden');
-      if (p === 'topup') {
-        document.getElementById('qr-memo').innerText = 'NAPTIEN ' + u.u.toUpperCase();
-        renderTopupHistory();
-      }
+      if (p === 'topup') { document.getElementById('qr-memo').innerText = 'NAPTIEN ' + u.u.toUpperCase(); renderTopupHistory(); }
       if (p === 'history') renderHistory();
       if (p === 'admin') renderAdminTopups();
     }
-
     function render() {
       const u = curr();
       document.getElementById('auth-guest').classList.toggle('hidden', !!u);
       document.getElementById('auth-user').classList.toggle('hidden', !u);
       document.getElementById('nav-admin').classList.toggle('hidden', !(u && u.role === 'admin'));
       if (u) document.getElementById('user-balance').innerText = vnd(u.bal);
-      
       const accs = getAccs().filter(a => !a.sold);
       document.getElementById('accounts-grid').innerHTML = accs.map(a => `
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-3 flex flex-col justify-between space-y-2">
@@ -243,7 +199,6 @@
         </div>
       `).join('') || '<p class="text-slate-500 text-xs col-span-full text-center">Hết tài khoản.</p>';
     }
-
     function buyAcc(id) {
       const u = curr();
       if (!u) return openAuth('login');
@@ -251,28 +206,20 @@
       const a = accs.find(x => x.id === id);
       if (u.bal < a.price) return alert('Số dư không đủ! Nạp thêm tiền nhé.'), go('topup');
       if (!confirm(`Xác nhận mua ${a.title} với giá ${vnd(a.price)}?`)) return;
-
       const users = getUsers();
       const userObj = users.find(x => x.u === u.u);
-      userObj.bal -= a.price;
-      a.sold = true;
+      userObj.bal -= a.price; a.sold = true;
       userObj.bought.unshift({ id: a.id, title: a.title, user: a.user, pass: a.pass, type: 'Shop' });
-
-      setUsers(users);
-      setAccs(accs);
-      render();
+      setUsers(users); setAccs(accs); render();
       alert('Mua thành công! Vào mục "Đã Mua" xem thông tin.');
       go('history');
     }
-
     function doSpinWheel() {
       const u = curr();
       if (u.bal < 20000) return alert('Số dư không đủ 20.000đ để quay!'), go('topup');
-
       const users = getUsers();
       const userObj = users.find(x => x.u === u.u);
       userObj.bal -= 20000;
-
       const isVip = Math.random() < 0.25;
       const reward = isVip ? {
         id: 'VIP' + Math.floor(100 + Math.random() * 900),
@@ -287,85 +234,62 @@
         pass: 'cuipass' + Math.floor(100 + Math.random() * 900),
         type: 'Vòng Quay Thường'
       };
-
       userObj.bought.unshift(reward);
-      setUsers(users);
-      render();
-
+      setUsers(users); render();
       document.getElementById('wheel-result').innerHTML = `<b class="${isVip ? 'text-emerald-400' : 'text-amber-400'}">${reward.title}<br>User: ${reward.user} | Pass: ${reward.pass}</b>`;
-      alert(isVip ? 'CHÚC MỪNG! Quay trúng ACC VIP cực hiếm!' : 'Quay trúng Acc cùi. Chúc bạn may mắn lần sau!');
+      alert(isVip ? 'CHÚC MỪNG! Quay trúng ACC VIP!' : 'Quay trúng Acc cùi. Chúc bạn may mắn lần sau!');
     }
-
     function doCreateTopup(e) {
       e.preventDefault();
       const u = curr();
       const amt = parseInt(document.getElementById('topup-amount').value);
       if (amt < 50000 || amt > 1000000000) return alert('Số tiền nạp từ 50.000đ đến 1 tỷ!');
-
       const topups = getTopups();
-      topups.unshift({
-        id: 'TP' + Math.floor(1000 + Math.random() * 9000),
-        user: u.u, amount: amt, status: 'pending', time: new Date().toLocaleString('vi-VN')
-      });
-      setTopups(topups);
-      e.target.reset();
+      topups.unshift({ id: 'TP' + Math.floor(1000 + Math.random() * 9000), user: u.u, amount: amt, status: 'pending', time: new Date().toLocaleString('vi-VN') });
+      setTopups(topups); e.target.reset();
       alert('Đã tạo lệnh nạp! Vui lòng chuyển khoản đúng nội dung.');
       renderTopupHistory();
     }
-
     function renderTopupHistory() {
       const u = curr();
       const topups = getTopups().filter(x => x.user === u.u);
       document.getElementById('topup-history').innerHTML = topups.map(t => {
         let st = t.status === 'pending' ? '<span class="text-amber-400 font-bold">Chờ duyệt</span>' : (t.status === 'approved' ? '<span class="text-emerald-400 font-bold">Đã duyệt (+'+vnd(t.amount)+')</span>' : '<span class="text-red-400 font-bold">Từ chối</span>');
-        return `
-          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs">
-            <div><b class="text-white">${vnd(t.amount)}</b> (${t.time})<p class="mt-0.5">Trạng thái: ${st}</p></div>
-            <span class="text-[10px] bg-slate-900 px-2 py-1 rounded text-slate-400">#${t.id}</span>
-          </div>
-        `;
+        return `<div class="bg-slate-950 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs"><div><b class="text-white">${vnd(t.amount)}</b> (${t.time})<p class="mt-0.5">Trạng thái: ${st}</p></div><span class="text-[10px] bg-slate-900 px-2 py-1 rounded text-slate-400">#${t.id}</span></div>`;
       }).join('') || '<p class="text-slate-500 text-xs">Chưa có lịch sử nạp.</p>';
     }
-
     function renderAdminTopups() {
       const topups = getTopups();
       document.getElementById('admin-topup-list').innerHTML = topups.map(t => {
         if (t.status !== 'pending') return '';
-        return `
-          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs">
-            <div><b class="text-white">${t.user}</b> nạp <b class="text-emerald-400">${vnd(t.amount)}</b></div>
-            <div class="flex gap-2">
-              <button onclick="approveTopup('${t.id}')" class="px-3 py-1.5 bg-emerald-500 text-slate-950 font-black rounded-lg">DUYỆT</button>
-              <button onclick="rejectTopup('${t.id}')" class="px-3 py-1.5 bg-red-500 text-white font-black rounded-lg">HỦY</button>
-            </div>
-          </div>
-        `;
+        return `<div class="bg-slate-950 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs"><div><b class="text-white">${t.user}</b> nạp <b class="text-emerald-400">${vnd(t.amount)}</b></div><div class="flex gap-2"><button onclick="approveTopup('${t.id}')" class="px-3 py-1.5 bg-emerald-500 text-slate-950 font-black rounded-lg">DUYỆT</button><button onclick="rejectTopup('${t.id}')" class="px-3 py-1.5 bg-red-500 text-white font-black rounded-lg">HỦY</button></div></div>`;
       }).join('') || '<p class="text-slate-500 text-xs">Không có lệnh nạp nào chờ duyệt.</p>';
     }
-
     function approveTopup(id) {
       const topups = getTopups();
       const t = topups.find(x => x.id === id);
       if (!t || t.status !== 'pending') return;
       const users = getUsers();
       const u = users.find(x => x.u === t.user);
-      if (u) {
-        u.bal += t.amount;
-        t.status = 'approved';
-        setUsers(users);
-        setTopups(topups);
-        render();
-        renderAdminTopups();
-        alert(`Đã duyệt cộng ${vnd(t.amount)} cho ${t.user}!`);
-      }
+      if (u) { u.bal += t.amount; t.status = 'approved'; setUsers(users); setTopups(topups); render(); renderAdminTopups(); alert(`Đã duyệt cộng ${vnd(t.amount)} cho ${t.user}!`); }
     }
-
     function rejectTopup(id) {
       const topups = getTopups();
       const t = topups.find(x => x.id === id);
       if (t) { t.status = 'rejected'; setTopups(topups); renderAdminTopups(); alert('Đã từ chối.'); }
     }
-
     function renderHistory() {
       const u = curr();
-      document.getElementById('purchased-logs').innerHTML = (u.bought.
+      document.getElementById('purchased-logs').innerHTML = (u.bought.length ? u.bought : []).map(x => `
+        <div class="bg-slate-950 p-3 rounded-xl border border-emerald-500/40 text-xs space-y-1">
+          <div class="font-black text-emerald-400 flex justify-between"><span>#${x.id} • ${x.title}</span><span class="text-[10px] text-slate-400 uppercase">(${x.type})</span></div>
+          <div>User: <b class="text-white select-all">${x.user}</b></div>
+          <div>Pass: <b class="text-amber-400 select-all">${x.pass}</b></div>
+        </div>
+      `).join('') || '<p class="text-slate-500 text-xs">Chưa có tài khoản nào.</p>';
+    }
+    function doAddAcc(e) {
+      e.preventDefault();
+      const accs = getAccs();
+      accs.unshift({
+        id: Math.floor(103 + Math.random() * 890).toString

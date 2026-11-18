@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DELTASHOP VN - Bán Acc Delta Force Tự Động</title>
+  <title>DELTASHOP VN - Shop Acc Tự Động</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </head>
@@ -11,122 +11,270 @@
 
   <!-- HEADER -->
   <header class="sticky top-0 z-40 bg-slate-900 border-b border-slate-800 shadow-lg">
-    <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
+    <div class="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
       <div onclick="go('home')" class="flex items-center gap-2 cursor-pointer">
-        <div class="w-9 h-9 rounded-xl bg-emerald-500 text-slate-950 flex items-center justify-center font-black text-lg">
+        <div class="w-8 h-8 rounded-lg bg-emerald-500 text-slate-950 flex items-center justify-center font-black">
           <i class="fas fa-crosshairs"></i>
         </div>
-        <div>
-          <div class="font-black text-base leading-none">DELTA<span class="text-emerald-400">SHOP</span></div>
-          <div class="text-[10px] text-slate-400 font-bold uppercase mt-0.5">Garena VN • 24/7</div>
-        </div>
+        <span class="font-black text-sm tracking-tight text-white">DELTA<span class="text-emerald-400">SHOP</span></span>
       </div>
 
-      <!-- Chưa đăng nhập -->
       <div id="auth-guest" class="flex items-center gap-2">
-        <button onclick="openAuth('login')" class="px-3 py-2 rounded-xl bg-slate-800 text-xs font-bold border border-slate-700">Đăng Nhập</button>
-        <button onclick="openAuth('reg')" class="px-3 py-2 rounded-xl bg-emerald-500 text-slate-950 text-xs font-black">Đăng Ký</button>
+        <button onclick="openAuth('login')" class="px-3 py-1.5 rounded-lg bg-slate-800 text-xs font-bold border border-slate-700">Đăng Nhập</button>
+        <button onclick="openAuth('reg')" class="px-3 py-1.5 rounded-lg bg-emerald-500 text-slate-950 text-xs font-black">Đăng Ký</button>
       </div>
 
-      <!-- Đã đăng nhập -->
       <div id="auth-user" class="hidden flex items-center gap-2">
-        <button onclick="go('topup')" class="bg-slate-800 border border-emerald-500/40 px-2.5 py-1.5 rounded-xl flex items-center gap-1.5 text-xs font-black text-emerald-400">
-          <i class="fas fa-wallet"></i> <span id="user-balance">0đ</span>
+        <button onclick="go('topup')" class="bg-slate-800 border border-emerald-500/40 px-2.5 py-1 rounded-lg text-xs font-black text-emerald-400">
+          <i class="fas fa-wallet mr-1"></i><span id="user-balance">0đ</span>
         </button>
-        <span id="user-name" class="text-xs font-bold text-slate-300 max-w-[70px] truncate"></span>
-        <button onclick="doLogout()" class="p-2 rounded-xl bg-red-500/20 text-red-400 text-xs font-bold" title="Đăng xuất">
-          <i class="fas fa-sign-out-alt"></i>
-        </button>
+        <button onclick="doLogout()" class="p-1.5 rounded-lg bg-red-500/20 text-red-400 text-xs"><i class="fas fa-sign-out-alt"></i></button>
       </div>
     </div>
 
-    <!-- Menu điều hướng -->
-    <nav class="bg-slate-900/95 border-t border-slate-800/80">
-      <div class="max-w-5xl mx-auto px-4 py-2 flex justify-around text-xs font-bold text-slate-300">
-        <button onclick="go('home')" class="hover:text-emerald-400"><i class="fas fa-store mr-1"></i>Shop Acc</button>
-        <button onclick="go('topup')" class="hover:text-emerald-400"><i class="fas fa-coins mr-1 text-emerald-400"></i>Nạp Tiền</button>
-        <button onclick="go('history')" class="hover:text-emerald-400"><i class="fas fa-key mr-1 text-cyan-400"></i>Acc Đã Mua</button>
-        <button id="nav-admin-btn" onclick="go('admin')" class="hidden text-amber-400"><i class="fas fa-crown mr-1"></i>Admin</button>
-      </div>
+    <nav class="bg-slate-900 border-t border-slate-800 flex justify-around py-2 text-xs font-bold text-slate-400">
+      <button onclick="go('home')" class="hover:text-emerald-400"><i class="fas fa-store mr-1"></i>Shop Acc</button>
+      <button onclick="go('topup')" class="hover:text-emerald-400"><i class="fas fa-coins mr-1 text-emerald-400"></i>Nạp Tiền</button>
+      <button onclick="go('history')" class="hover:text-emerald-400"><i class="fas fa-key mr-1 text-cyan-400"></i>Đã Mua</button>
+      <button id="nav-admin" onclick="go('admin')" class="hidden text-amber-400"><i class="fas fa-crown mr-1"></i>Admin</button>
     </nav>
   </header>
 
-  <!-- NỘI DUNG CHÍNH -->
-  <main class="max-w-5xl mx-auto px-4 py-6">
+  <!-- MAIN -->
+  <main class="max-w-4xl mx-auto px-4 py-4 space-y-4">
 
-    <!-- 1. TRANG CHỦ -->
-    <section id="page-home" class="space-y-5">
-      <div class="bg-gradient-to-r from-slate-900 via-emerald-950 to-slate-900 border border-emerald-500/30 rounded-2xl p-5">
-        <span class="text-[10px] font-black uppercase px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400">Giao Dịch Tự Động • Trắng Thông Tin</span>
-        <h1 class="text-2xl font-black mt-2">KHO ACC <span class="text-emerald-400">DELTA FORCE</span> VIP</h1>
-        <p class="text-xs text-slate-300 mt-1">Sẵn M7 Spectrum Blitz, dao Dark Star, full đặc nhiệm. Đăng ký tài khoản mới tặng ngay 50.000đ trải nghiệm!</p>
+    <!-- HOME -->
+    <section id="page-home" class="space-y-4">
+      <div class="bg-gradient-to-r from-slate-900 via-emerald-950 to-slate-900 border border-emerald-500/30 rounded-2xl p-4">
+        <h1 class="text-lg font-black text-white">SHOP ACC <span class="text-emerald-400">DELTA FORCE</span></h1>
+        <p class="text-xs text-slate-300 mt-1">Đăng ký mới nhận ngay <b class="text-emerald-400">50.000đ</b> vào ví trải nghiệm!</p>
       </div>
 
-      <div class="flex items-center justify-between bg-slate-900 p-3.5 rounded-2xl border border-slate-800">
-        <h2 class="font-black text-sm uppercase">Danh Sách Acc (<span id="acc-count">0</span>)</h2>
-        <select id="filter-price" onchange="renderAccs()" class="bg-slate-800 border border-slate-700 text-xs font-bold rounded-xl px-3 py-2 outline-none">
-          <option value="all">Tất cả giá</option>
-          <option value="low">Dưới 200.000đ</option>
-          <option value="mid">200k - 500k</option>
-          <option value="high">Trên 500.000đ</option>
-        </select>
-      </div>
-
-      <div id="accounts-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+      <div id="accounts-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
     </section>
 
-    <!-- 2. TRANG NẠP TIỀN -->
-    <section id="page-topup" class="hidden max-w-lg mx-auto space-y-5">
-      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4">
-        <h2 class="text-lg font-black text-emerald-400"><i class="fas fa-wallet mr-1.5"></i>Nạp Tiền Tài Khoản</h2>
-        
-        <form onsubmit="doTopupCard(event)" class="space-y-3 text-xs">
-          <p class="font-bold text-slate-300 uppercase">Cách 1: Nạp Thẻ Cào Tự Động (100%)</p>
-          <select id="card-type" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-xl font-bold">
-            <option value="VIETTEL">Thẻ Viettel</option>
-            <option value="GARENA">Thẻ Garena</option>
-            <option value="VINAPHONE">Thẻ Vinaphone</option>
-          </select>
-          <select id="card-val" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-xl font-bold text-emerald-400">
-            <option value="50000">50.000đ</option>
-            <option value="100000" selected>100.000đ</option>
-            <option value="200000">200.000đ</option>
-            <option value="500000">500.000đ</option>
-          </select>
-          <input type="text" id="card-seri" required placeholder="Nhập số Seri thẻ..." class="w-full p-3 bg-slate-950 border border-slate-800 rounded-xl">
-          <input type="text" id="card-pin" required placeholder="Nhập mã thẻ cào..." class="w-full p-3 bg-slate-950 border border-slate-800 rounded-xl">
-          <button type="submit" class="w-full py-3.5 bg-emerald-500 text-slate-950 font-black rounded-xl text-sm">NẠP THẺ NGAY</button>
-        </form>
+    <!-- TOPUP -->
+    <section id="page-topup" class="hidden space-y-3">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-3 text-xs">
+        <h2 class="font-black text-emerald-400 text-sm"><i class="fas fa-wallet mr-1"></i>Nạp Tiền Nhanh</h2>
+        <select id="topup-val" class="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-xl font-bold text-emerald-400">
+          <option value="50000">Nạp 50.000đ</option>
+          <option value="100000" selected>Nạp 100.000đ</option>
+          <option value="200000">Nạp 200.000đ</option>
+          <option value="500000">Nạp 500.000đ</option>
+        </select>
+        <button onclick="doTopup()" class="w-full py-3 bg-emerald-500 text-slate-950 font-black rounded-xl text-xs">XÁC NHẬN NẠP TIỀN</button>
+      </div>
+    </section>
 
-        <div class="border-t border-slate-800 pt-4 space-y-2 text-xs">
-          <p class="font-bold text-slate-300 uppercase">Cách 2: Chuyển Khoản Nhanh (MB Bank: 0988776655)</p>
-          <div class="grid grid-cols-3 gap-2">
-            <button onclick="doTopupBank(100000)" class="py-2.5 bg-slate-800 hover:bg-emerald-500 hover:text-slate-950 font-black rounded-xl border border-slate-700">+100k</button>
-            <button onclick="doTopupBank(300000)" class="py-2.5 bg-slate-800 hover:bg-emerald-500 hover:text-slate-950 font-black rounded-xl border border-slate-700">+300k</button>
-            <button onclick="doTopupBank(500000)" class="py-2.5 bg-slate-800 hover:bg-emerald-500 hover:text-slate-950 font-black rounded-xl border border-slate-700">+500k</button>
+    <!-- HISTORY -->
+    <section id="page-history" class="hidden">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-3">
+        <h2 class="font-black text-white text-sm"><i class="fas fa-key text-emerald-400 mr-1"></i>Tài Khoản Đã Mua</h2>
+        <div id="purchased-logs" class="space-y-2"></div>
+      </div>
+    </section>
+
+    <!-- ADMIN -->
+    <section id="page-admin" class="hidden">
+      <div class="bg-slate-900 border border-amber-500/40 rounded-2xl p-4 space-y-3 text-xs">
+        <h2 class="font-black text-amber-400 text-sm"><i class="fas fa-crown mr-1"></i>Đăng Bán Acc</h2>
+        <form onsubmit="doAddAcc(event)" class="space-y-2.5">
+          <input type="text" id="adm-title" required placeholder="Tiêu đề Acc..." class="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white">
+          <input type="number" id="adm-price" required placeholder="Giá (VNĐ)..." class="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-emerald-400 font-bold">
+          <input type="text" id="adm-skins" required placeholder="Skin / Rương đồ..." class="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white">
+          <input type="text" id="adm-user" required placeholder="User Garena..." class="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white">
+          <input type="text" id="adm-pass" required placeholder="Pass Garena..." class="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white">
+          <button type="submit" class="w-full py-3 bg-amber-500 text-slate-950 font-black rounded-xl">ĐĂNG LÊN SHOP</button>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- AUTH MODAL -->
+  <div id="auth-modal" class="hidden fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-700 w-full max-w-xs rounded-2xl p-4 relative space-y-3">
+      <button onclick="document.getElementById('auth-modal').classList.add('hidden')" class="absolute top-3 right-3 text-slate-400"><i class="fas fa-times"></i></button>
+      <div class="flex gap-3 border-b border-slate-800 pb-2 text-xs font-black">
+        <button id="tab-l" onclick="switchAuth('l')" class="text-emerald-400">ĐĂNG NHẬP</button>
+        <button id="tab-r" onclick="switchAuth('r')" class="text-slate-400">ĐĂNG KÝ</button>
+      </div>
+      <form id="form-l" onsubmit="doLogin(event)" class="space-y-2.5 text-xs">
+        <input type="text" id="l-u" required placeholder="Tài khoản (admin)..." class="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white">
+        <input type="password" id="l-p" required placeholder="Mật khẩu (123456)..." class="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white">
+        <button type="submit" class="w-full py-2.5 bg-emerald-500 text-slate-950 font-black rounded-xl">ĐĂNG NHẬP</button>
+      </form>
+      <form id="form-r" onsubmit="doReg(event)" class="hidden space-y-2.5 text-xs">
+        <input type="text" id="r-u" required placeholder="Tạo tài khoản..." class="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white">
+        <input type="password" id="r-p" required placeholder="Tạo mật khẩu..." class="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white">
+        <button type="submit" class="w-full py-2.5 bg-emerald-500 text-slate-950 font-black rounded-xl">ĐĂNG KÝ (+50K)</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const USERS_KEY = 'df_u_v3';
+    const ACCS_KEY = 'df_a_v3';
+    const CURR_KEY = 'df_c_v3';
+
+    function init() {
+      if (!localStorage.getItem(USERS_KEY)) {
+        localStorage.setItem(USERS_KEY, JSON.stringify([{ u: 'admin', p: '123456', bal: 2000000, role: 'admin', bought: [] }]));
+      }
+      if (!localStorage.getItem(ACCS_KEY)) {
+        localStorage.setItem(ACCS_KEY, JSON.stringify([
+          { id: '101', title: 'Acc VIP M7 Spectrum + Dao Dark Star', price: 350000, skins: 'M7 Spectrum, Dao Dark Star', user: 'acc_vips1', pass: 'pass123', sold: false },
+          { id: '102', title: 'Acc Rank Marshal Full Đặc Nhiệm', price: 180000, skins: 'AUG Cyber, 15M Tekniq', user: 'acc_vips2', pass: 'pass456', sold: false }
+        ]));
+      }
+      render();
+    }
+
+    const getUsers = () => JSON.parse(localStorage.getItem(USERS_KEY)) || [];
+    const setUsers = (d) => localStorage.setItem(USERS_KEY, JSON.stringify(d));
+    const getAccs = () => JSON.parse(localStorage.getItem(ACCS_KEY)) || [];
+    const setAccs = (d) => localStorage.setItem(ACCS_KEY, JSON.stringify(d));
+    const curr = () => getUsers().find(x => x.u === localStorage.getItem(CURR_KEY)) || null;
+    const vnd = (n) => Number(n).toLocaleString('vi-VN') + 'đ';
+
+    function openAuth(m) {
+      document.getElementById('auth-modal').classList.remove('hidden');
+      const isL = m === 'login';
+      document.getElementById('form-l').classList.toggle('hidden', !isL);
+      document.getElementById('form-r').classList.toggle('hidden', isL);
+      document.getElementById('tab-l').className = isL ? 'text-emerald-400' : 'text-slate-400';
+      document.getElementById('tab-r').className = !isL ? 'text-emerald-400' : 'text-slate-400';
+    }
+
+    function switchAuth(m) { openAuth(m === 'l' ? 'login' : 'reg'); }
+
+    function doReg(e) {
+      e.preventDefault();
+      const u = document.getElementById('r-u').value.trim().toLowerCase();
+      const p = document.getElementById('r-p').value.trim();
+      const users = getUsers();
+      if (users.some(x => x.u === u)) return alert('Tên tài khoản đã tồn tại!');
+      users.push({ u, p, bal: 50000, role: 'member', bought: [] });
+      setUsers(users);
+      localStorage.setItem(CURR_KEY, u);
+      document.getElementById('auth-modal').classList.add('hidden');
+      render();
+      alert('Đăng ký thành công! Tặng 50.000đ vào ví.');
+    }
+
+    function doLogin(e) {
+      e.preventDefault();
+      const u = document.getElementById('l-u').value.trim().toLowerCase();
+      const p = document.getElementById('l-p').value.trim();
+      const found = getUsers().find(x => x.u === u && x.p === p);
+      if (!found) return alert('Sai tài khoản hoặc mật khẩu!');
+      localStorage.setItem(CURR_KEY, found.u);
+      document.getElementById('auth-modal').classList.add('hidden');
+      render();
+    }
+
+    function doLogout() {
+      localStorage.removeItem(CURR_KEY);
+      go('home');
+      render();
+    }
+
+    function go(p) {
+      const u = curr();
+      if ((p === 'topup' || p === 'history') && !u) return openAuth('login');
+      if (p === 'admin' && (!u || u.role !== 'admin')) return alert('Chỉ Admin mới vào được!');
+      ['home', 'topup', 'history', 'admin'].forEach(id => document.getElementById('page-' + id).classList.add('hidden'));
+      document.getElementById('page-' + p).classList.remove('hidden');
+      if (p === 'history') renderHistory();
+    }
+
+    function render() {
+      const u = curr();
+      document.getElementById('auth-guest').classList.toggle('hidden', !!u);
+      document.getElementById('auth-user').classList.toggle('hidden', !u);
+      document.getElementById('nav-admin').classList.toggle('hidden', !(u && u.role === 'admin'));
+      if (u) document.getElementById('user-balance').innerText = vnd(u.bal);
+      
+      const accs = getAccs().filter(a => !a.sold);
+      document.getElementById('accounts-grid').innerHTML = accs.map(a => `
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-3 flex flex-col justify-between space-y-2">
+          <div>
+            <span class="text-[10px] font-black px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400">#${a.id}</span>
+            <h3 class="font-extrabold text-xs text-white mt-1">${a.title}</h3>
+            <p class="text-[11px] text-slate-400 mt-0.5">${a.skins}</p>
+          </div>
+          <div class="pt-2 border-t border-slate-800 flex items-center justify-between">
+            <span class="text-sm font-black text-emerald-400">${vnd(a.price)}</span>
+            <button onclick="buyAcc('${a.id}')" class="px-3 py-1.5 rounded-lg bg-emerald-500 text-slate-950 font-black text-xs">MUA</button>
           </div>
         </div>
-      </div>
+      `).join('') || '<p class="text-slate-500 text-xs col-span-full text-center">Hết tài khoản.</p>';
+    }
 
-      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
-        <h3 class="text-xs font-black uppercase text-slate-400 mb-3">Lịch Sử Nạp Tiền</h3>
-        <div id="topup-logs" class="space-y-2 text-xs"></div>
-      </div>
-    </section>
+    function buyAcc(id) {
+      const u = curr();
+      if (!u) return openAuth('login');
+      const accs = getAccs();
+      const a = accs.find(x => x.id === id);
+      if (u.bal < a.price) return alert('Số dư không đủ! Vui lòng nạp thêm tiền.'), go('topup');
+      
+      if (!confirm(`Xác nhận mua ${a.title} với giá ${vnd(a.price)}?`)) return;
 
-    <!-- 3. TRANG ACC ĐÃ MUA -->
-    <section id="page-history" class="hidden max-w-2xl mx-auto">
-      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
-        <h2 class="text-lg font-black text-white mb-3"><i class="fas fa-key text-emerald-400 mr-1.5"></i>Tài Khoản Delta Force Đã Mua</h2>
-        <div id="purchased-logs" class="space-y-3"></div>
-      </div>
-    </section>
+      const users = getUsers();
+      const userObj = users.find(x => x.u === u.u);
+      userObj.bal -= a.price;
+      a.sold = true;
+      userObj.bought.unshift({ id: a.id, title: a.title, user: a.user, pass: a.pass });
 
-    <!-- 4. TRANG ADMIN -->
-    <section id="page-admin" class="hidden max-w-lg mx-auto">
-      <div class="bg-slate-900 border border-amber-500/40 rounded-2xl p-5">
-        <h2 class="text-lg font-black text-amber-400 mb-4"><i class="fas fa-crown mr-1.5"></i>Đăng Bán Acc Mới</h2>
-        <form onsubmit="doAddAcc(event)" class="space-y-3 text-xs">
-          <input type="text" id="adm-title" required placeholder="Tiêu đề Acc (VD: Acc VIP M7 Spectrum)" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-xl">
-          <input type="number" id="adm-price" required placeholder="Giá bán VNĐ (VD: 250000)" class="w-full p-3 bg-slate-950 border border-
-            
+      setUsers(users);
+      setAccs(accs);
+      render();
+      alert('Mua thành công! Vào mục "Đã Mua" để nhận tài khoản mật khẩu.');
+      go('history');
+    }
+
+    function doTopup() {
+      const amt = parseInt(document.getElementById('topup-val').value);
+      const users = getUsers();
+      const u = users.find(x => x.u === localStorage.getItem(CURR_KEY));
+      u.bal += amt;
+      setUsers(users);
+      render();
+      alert(`Nạp thành công +${vnd(amt)} vào ví!`);
+    }
+
+    function renderHistory() {
+      const u = curr();
+      document.getElementById('purchased-logs').innerHTML = (u.bought.length ? u.bought : []).map(x => `
+        <div class="bg-slate-950 p-3 rounded-xl border border-emerald-500/40 text-xs space-y-1">
+          <div class="font-black text-emerald-400">#${x.id} • ${x.title}</div>
+          <div>User: <b class="text-white select-all">${x.user}</b></div>
+          <div>Pass: <b class="text-amber-400 select-all">${x.pass}</b></div>
+        </div>
+      `).join('') || '<p class="text-slate-500 text-xs">Chưa mua acc nào.</p>';
+    }
+
+    function doAddAcc(e) {
+      e.preventDefault();
+      const accs = getAccs();
+      accs.unshift({
+        id: Math.floor(103 + Math.random() * 890).toString(),
+        title: document.getElementById('adm-title').value.trim(),
+        price: parseInt(document.getElementById('adm-price').value),
+        skins: document.getElementById('adm-skins').value.trim(),
+        user: document.getElementById('adm-user').value.trim(),
+        pass: document.getElementById('adm-pass').value.trim(),
+        sold: false
+      });
+      setAccs(accs);
+      e.target.reset();
+      alert('Đăng bán thành công!');
+      go('home');
+      render();
+    }
+
+    init();
+  </script>
+</body>
+</html>

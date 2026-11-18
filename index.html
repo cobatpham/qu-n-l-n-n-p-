@@ -3,50 +3,130 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SHOP DELTA FORCE VN - Hệ Thống Bán Acc Tự Động</title>
+  <title>DELTASHOP VN - Bán Acc Delta Force Tự Động</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-emerald-500 selection:text-slate-950">
+<body class="bg-slate-950 text-slate-100 font-sans antialiased">
 
-  <!-- THANH ĐIỀU HƯỚNG (NAVBAR) -->
-  <nav class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 shadow-lg">
-    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-      <!-- Logo -->
-      <div onclick="switchPage('home')" class="flex items-center gap-2.5 cursor-pointer">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-cyan-600 flex items-center justify-center text-slate-950 font-black text-xl shadow-lg shadow-emerald-500/20">
+  <!-- HEADER -->
+  <header class="sticky top-0 z-40 bg-slate-900 border-b border-slate-800 shadow-lg">
+    <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
+      <div onclick="go('home')" class="flex items-center gap-2 cursor-pointer">
+        <div class="w-9 h-9 rounded-xl bg-emerald-500 text-slate-950 flex items-center justify-center font-black text-lg">
           <i class="fas fa-crosshairs"></i>
         </div>
         <div>
-          <span class="font-black text-lg tracking-tight text-white">DELTA<span class="text-emerald-400">SHOP</span></span>
-          <p class="text-[10px] text-slate-400 font-semibold uppercase tracking-widest -mt-1">Garena VN • Tự Động 24/7</p>
+          <div class="font-black text-base leading-none">DELTA<span class="text-emerald-400">SHOP</span></div>
+          <div class="text-[10px] text-slate-400 font-bold uppercase mt-0.5">Garena VN • 24/7</div>
         </div>
       </div>
 
-      <!-- Menu PC -->
-      <div class="hidden md:flex items-center gap-6 text-sm font-bold text-slate-300">
-        <button onclick="switchPage('home')" class="hover:text-emerald-400 transition">Trang Chủ</button>
-        <button onclick="switchPage('topup')" class="hover:text-emerald-400 transition">Nạp Tiền</button>
-        <button onclick="switchPage('history')" class="hover:text-emerald-400 transition">Lịch Sử Mua</button>
-        <button id="nav-admin-pc" onclick="switchPage('admin')" class="hidden text-amber-400 hover:text-amber-300 transition"><i class="fas fa-crown mr-1"></i> Quản Trị</button>
-      </div>
-
-      <!-- Khu vực Tài khoản -->
+      <!-- Chưa đăng nhập -->
       <div id="auth-guest" class="flex items-center gap-2">
-        <button onclick="openAuthModal('login')" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold transition border border-slate-700">Đăng Nhập</button>
-        <button onclick="openAuthModal('register')" class="px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-black transition shadow-md shadow-emerald-500/20">Đăng Ký</button>
+        <button onclick="openAuth('login')" class="px-3 py-2 rounded-xl bg-slate-800 text-xs font-bold border border-slate-700">Đăng Nhập</button>
+        <button onclick="openAuth('reg')" class="px-3 py-2 rounded-xl bg-emerald-500 text-slate-950 text-xs font-black">Đăng Ký</button>
       </div>
 
-      <div id="auth-user" class="hidden flex items-center gap-3">
-        <div onclick="switchPage('topup')" class="cursor-pointer bg-slate-800/90 border border-emerald-500/30 px-3 py-1.5 rounded-xl flex items-center gap-2 hover:bg-slate-800 transition">
-          <i class="fas fa-wallet text-emerald-400 text-xs"></i>
-          <span id="user-balance" class="text-xs font-black text-emerald-400">0đ</span>
-          <span class="w-4 h-4 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center text-[10px] font-black">+</span>
+      <!-- Đã đăng nhập -->
+      <div id="auth-user" class="hidden flex items-center gap-2">
+        <button onclick="go('topup')" class="bg-slate-800 border border-emerald-500/40 px-2.5 py-1.5 rounded-xl flex items-center gap-1.5 text-xs font-black text-emerald-400">
+          <i class="fas fa-wallet"></i> <span id="user-balance">0đ</span>
+        </button>
+        <span id="user-name" class="text-xs font-bold text-slate-300 max-w-[70px] truncate"></span>
+        <button onclick="doLogout()" class="p-2 rounded-xl bg-red-500/20 text-red-400 text-xs font-bold" title="Đăng xuất">
+          <i class="fas fa-sign-out-alt"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Menu điều hướng -->
+    <nav class="bg-slate-900/95 border-t border-slate-800/80">
+      <div class="max-w-5xl mx-auto px-4 py-2 flex justify-around text-xs font-bold text-slate-300">
+        <button onclick="go('home')" class="hover:text-emerald-400"><i class="fas fa-store mr-1"></i>Shop Acc</button>
+        <button onclick="go('topup')" class="hover:text-emerald-400"><i class="fas fa-coins mr-1 text-emerald-400"></i>Nạp Tiền</button>
+        <button onclick="go('history')" class="hover:text-emerald-400"><i class="fas fa-key mr-1 text-cyan-400"></i>Acc Đã Mua</button>
+        <button id="nav-admin-btn" onclick="go('admin')" class="hidden text-amber-400"><i class="fas fa-crown mr-1"></i>Admin</button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- NỘI DUNG CHÍNH -->
+  <main class="max-w-5xl mx-auto px-4 py-6">
+
+    <!-- 1. TRANG CHỦ -->
+    <section id="page-home" class="space-y-5">
+      <div class="bg-gradient-to-r from-slate-900 via-emerald-950 to-slate-900 border border-emerald-500/30 rounded-2xl p-5">
+        <span class="text-[10px] font-black uppercase px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400">Giao Dịch Tự Động • Trắng Thông Tin</span>
+        <h1 class="text-2xl font-black mt-2">KHO ACC <span class="text-emerald-400">DELTA FORCE</span> VIP</h1>
+        <p class="text-xs text-slate-300 mt-1">Sẵn M7 Spectrum Blitz, dao Dark Star, full đặc nhiệm. Đăng ký tài khoản mới tặng ngay 50.000đ trải nghiệm!</p>
+      </div>
+
+      <div class="flex items-center justify-between bg-slate-900 p-3.5 rounded-2xl border border-slate-800">
+        <h2 class="font-black text-sm uppercase">Danh Sách Acc (<span id="acc-count">0</span>)</h2>
+        <select id="filter-price" onchange="renderAccs()" class="bg-slate-800 border border-slate-700 text-xs font-bold rounded-xl px-3 py-2 outline-none">
+          <option value="all">Tất cả giá</option>
+          <option value="low">Dưới 200.000đ</option>
+          <option value="mid">200k - 500k</option>
+          <option value="high">Trên 500.000đ</option>
+        </select>
+      </div>
+
+      <div id="accounts-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+    </section>
+
+    <!-- 2. TRANG NẠP TIỀN -->
+    <section id="page-topup" class="hidden max-w-lg mx-auto space-y-5">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4">
+        <h2 class="text-lg font-black text-emerald-400"><i class="fas fa-wallet mr-1.5"></i>Nạp Tiền Tài Khoản</h2>
+        
+        <form onsubmit="doTopupCard(event)" class="space-y-3 text-xs">
+          <p class="font-bold text-slate-300 uppercase">Cách 1: Nạp Thẻ Cào Tự Động (100%)</p>
+          <select id="card-type" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-xl font-bold">
+            <option value="VIETTEL">Thẻ Viettel</option>
+            <option value="GARENA">Thẻ Garena</option>
+            <option value="VINAPHONE">Thẻ Vinaphone</option>
+          </select>
+          <select id="card-val" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-xl font-bold text-emerald-400">
+            <option value="50000">50.000đ</option>
+            <option value="100000" selected>100.000đ</option>
+            <option value="200000">200.000đ</option>
+            <option value="500000">500.000đ</option>
+          </select>
+          <input type="text" id="card-seri" required placeholder="Nhập số Seri thẻ..." class="w-full p-3 bg-slate-950 border border-slate-800 rounded-xl">
+          <input type="text" id="card-pin" required placeholder="Nhập mã thẻ cào..." class="w-full p-3 bg-slate-950 border border-slate-800 rounded-xl">
+          <button type="submit" class="w-full py-3.5 bg-emerald-500 text-slate-950 font-black rounded-xl text-sm">NẠP THẺ NGAY</button>
+        </form>
+
+        <div class="border-t border-slate-800 pt-4 space-y-2 text-xs">
+          <p class="font-bold text-slate-300 uppercase">Cách 2: Chuyển Khoản Nhanh (MB Bank: 0988776655)</p>
+          <div class="grid grid-cols-3 gap-2">
+            <button onclick="doTopupBank(100000)" class="py-2.5 bg-slate-800 hover:bg-emerald-500 hover:text-slate-950 font-black rounded-xl border border-slate-700">+100k</button>
+            <button onclick="doTopupBank(300000)" class="py-2.5 bg-slate-800 hover:bg-emerald-500 hover:text-slate-950 font-black rounded-xl border border-slate-700">+300k</button>
+            <button onclick="doTopupBank(500000)" class="py-2.5 bg-slate-800 hover:bg-emerald-500 hover:text-slate-950 font-black rounded-xl border border-slate-700">+500k</button>
+          </div>
         </div>
-        <div class="relative group">
-          <button class="flex items-center gap-2 bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-700 text-xs font-bold">
-            <i class="fas fa-user-circle text-slate-400 text-base"></i>
-            <span id="user-name" class="max-w-[80px] truncate">User</span>
-          </button>
-          <div class="hidden group-hover:block absolute right-0 mt-1 w-44 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl py-1.5 text-xs font-semibold
+      </div>
+
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+        <h3 class="text-xs font-black uppercase text-slate-400 mb-3">Lịch Sử Nạp Tiền</h3>
+        <div id="topup-logs" class="space-y-2 text-xs"></div>
+      </div>
+    </section>
+
+    <!-- 3. TRANG ACC ĐÃ MUA -->
+    <section id="page-history" class="hidden max-w-2xl mx-auto">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+        <h2 class="text-lg font-black text-white mb-3"><i class="fas fa-key text-emerald-400 mr-1.5"></i>Tài Khoản Delta Force Đã Mua</h2>
+        <div id="purchased-logs" class="space-y-3"></div>
+      </div>
+    </section>
+
+    <!-- 4. TRANG ADMIN -->
+    <section id="page-admin" class="hidden max-w-lg mx-auto">
+      <div class="bg-slate-900 border border-amber-500/40 rounded-2xl p-5">
+        <h2 class="text-lg font-black text-amber-400 mb-4"><i class="fas fa-crown mr-1.5"></i>Đăng Bán Acc Mới</h2>
+        <form onsubmit="doAddAcc(event)" class="space-y-3 text-xs">
+          <input type="text" id="adm-title" required placeholder="Tiêu đề Acc (VD: Acc VIP M7 Spectrum)" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-xl">
+          <input type="number" id="adm-price" required placeholder="Giá bán VNĐ (VD: 250000)" class="w-full p-3 bg-slate-950 border border-
             

@@ -2,272 +2,51 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Thợ Săn Vàng - Gold Miner</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SHOP DELTA FORCE VN - Hệ Thống Bán Acc Tự Động</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-  <style>
-    body { touch-action: manipulation; }
-  </style>
 </head>
-<body class="bg-slate-950 text-white font-sans antialiased overflow-hidden select-none">
+<body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-emerald-500 selection:text-slate-950">
 
-  <div class="max-w-md mx-auto h-[100dvh] flex flex-col justify-between relative bg-gradient-to-b from-sky-500 via-sky-700 to-amber-950 shadow-2xl overflow-hidden border-x border-slate-800">
-    
-    <!-- THANH THÔNG TIN TRÊN CÙNG -->
-    <header class="px-4 py-3 flex justify-between items-center bg-slate-900/90 backdrop-blur border-b border-white/10 z-10 shrink-0">
-      <div>
-        <p class="text-[10px] uppercase font-bold text-amber-300 tracking-wider">Tiền Vàng</p>
-        <p class="text-xl font-black text-amber-400" id="ui-score">$0</p>
-      </div>
-      <div class="text-center">
-        <span class="text-[10px] bg-amber-500/20 text-amber-300 border border-amber-400/30 px-2 py-0.5 rounded-full font-bold" id="ui-level">MÀN 1</span>
-        <p class="text-xs font-bold text-white mt-1">Mục tiêu: <span class="text-emerald-400" id="ui-target">$350</span></p>
-      </div>
-      <div class="text-right">
-        <p class="text-[10px] uppercase font-bold text-amber-300 tracking-wider">Thời Gian</p>
-        <p class="text-xl font-black text-red-400" id="ui-time">45s</p>
-      </div>
-    </header>
-
-    <!-- KHUNG CHƠI GAME -->
-    <div class="relative flex-1 w-full overflow-hidden" id="game-container">
-      <canvas id="gameCanvas" class="w-full h-full block"></canvas>
-
-      <!-- MÀN HÌNH BẮT ĐẦU / KẾT THÚC -->
-      <div id="game-overlay" class="absolute inset-0 bg-slate-950/95 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center z-30">
-        <div class="w-20 h-20 bg-amber-500/20 text-amber-400 rounded-3xl flex items-center justify-center text-4xl mb-4 border border-amber-500/40 shadow-lg">
-          <i class="fas fa-gem"></i>
+  <!-- THANH ĐIỀU HƯỚNG (NAVBAR) -->
+  <nav class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 shadow-lg">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+      <!-- Logo -->
+      <div onclick="switchPage('home')" class="flex items-center gap-2.5 cursor-pointer">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-cyan-600 flex items-center justify-center text-slate-950 font-black text-xl shadow-lg shadow-emerald-500/20">
+          <i class="fas fa-crosshairs"></i>
         </div>
-        <h2 id="overlay-title" class="text-2xl font-black tracking-tight mb-2 text-amber-400">THỢ SĂN VÀNG</h2>
-        <p id="overlay-desc" class="text-xs text-slate-300 mb-6 max-w-xs leading-relaxed">
-          Canh góc móc câu quay đúng hướng và bấm nút thả để gắp vàng & kim cương!
-        </p>
-        
-        <button onclick="handleStartGame()" class="w-full max-w-xs py-4 bg-gradient-to-r from-amber-500 to-yellow-500 active:scale-95 text-slate-950 font-black rounded-2xl shadow-lg text-base cursor-pointer">
-          BẮT ĐẦU CHƠI <i class="fas fa-play ml-1.5"></i>
-        </button>
+        <div>
+          <span class="font-black text-lg tracking-tight text-white">DELTA<span class="text-emerald-400">SHOP</span></span>
+          <p class="text-[10px] text-slate-400 font-semibold uppercase tracking-widest -mt-1">Garena VN • Tự Động 24/7</p>
+        </div>
       </div>
-    </div>
 
-    <!-- NÚT ĐIỀU KHIỂN BÊN DƯỚI -->
-    <div class="p-3.5 bg-slate-950 border-t border-slate-800 flex justify-center z-10 shrink-0">
-      <button onclick="triggerHook()" class="w-full max-w-xs py-3.5 bg-gradient-to-r from-amber-600 to-yellow-600 active:scale-95 text-white font-black rounded-2xl shadow-lg border border-amber-400/30 text-base flex items-center justify-center gap-2 cursor-pointer">
-        <i class="fas fa-anchor"></i> THẢ MÓC CÂU
-      </button>
-    </div>
+      <!-- Menu PC -->
+      <div class="hidden md:flex items-center gap-6 text-sm font-bold text-slate-300">
+        <button onclick="switchPage('home')" class="hover:text-emerald-400 transition">Trang Chủ</button>
+        <button onclick="switchPage('topup')" class="hover:text-emerald-400 transition">Nạp Tiền</button>
+        <button onclick="switchPage('history')" class="hover:text-emerald-400 transition">Lịch Sử Mua</button>
+        <button id="nav-admin-pc" onclick="switchPage('admin')" class="hidden text-amber-400 hover:text-amber-300 transition"><i class="fas fa-crown mr-1"></i> Quản Trị</button>
+      </div>
 
-  </div>
+      <!-- Khu vực Tài khoản -->
+      <div id="auth-guest" class="flex items-center gap-2">
+        <button onclick="openAuthModal('login')" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold transition border border-slate-700">Đăng Nhập</button>
+        <button onclick="openAuthModal('register')" class="px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-black transition shadow-md shadow-emerald-500/20">Đăng Ký</button>
+      </div>
 
-  <script>
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
-    const container = document.getElementById('game-container');
-    const overlay = document.getElementById('game-overlay');
-
-    let score = 0;
-    let level = 1;
-    let targetScore = 350;
-    let timeLeft = 45;
-    let isPlaying = false;
-    let timerInterval = null;
-    let items = [];
-
-    const winch = {
-      x: 180,
-      y: 45,
-      angle: 0,
-      dir: 0.025,
-      length: 45,
-      minLen: 45,
-      maxLen: 600,
-      state: 'IDLE', // IDLE | SHOOTING | RETURNING
-      speed: 7,
-      item: null
-    };
-
-    function syncDimensions() {
-      canvas.width = container.clientWidth || 360;
-      canvas.height = container.clientHeight || 500;
-      winch.x = canvas.width / 2;
-      winch.maxLen = Math.hypot(canvas.width, canvas.height);
-    }
-
-    function generateItems() {
-      const w = canvas.width;
-      const h = canvas.height;
-      return [
-        { x: w * 0.22, y: h * 0.58, r: 26, val: 150, weight: 3.0, type: 'gold', label: '$150' },
-        { x: w * 0.78, y: h * 0.65, r: 26, val: 150, weight: 3.0, type: 'gold', label: '$150' },
-        { x: w * 0.48, y: h * 0.45, r: 18, val: 80,  weight: 1.6, type: 'gold', label: '$80' },
-        { x: w * 0.32, y: h * 0.82, r: 14, val: 350, weight: 1.2, type: 'diamond', label: '$350' },
-        { x: w * 0.72, y: h * 0.85, r: 14, val: 350, weight: 1.2, type: 'diamond', label: '$350' },
-        { x: w * 0.50, y: h * 0.68, r: 30, val: 15,  weight: 6.0, type: 'stone', label: '$15' },
-        { x: w * 0.20, y: h * 0.75, r: 22, val: 10,  weight: 4.5, type: 'stone', label: '$10' }
-      ];
-    }
-
-    function handleStartGame() {
-      syncDimensions();
-      score = 0;
-      level = 1;
-      targetScore = 350;
-      timeLeft = 45;
-      isPlaying = true;
-      winch.state = 'IDLE';
-      winch.length = winch.minLen;
-      winch.angle = 0;
-      winch.item = null;
-
-      document.getElementById('ui-score').innerText = '$' + score;
-      document.getElementById('ui-level').innerText = 'MÀN ' + level;
-      document.getElementById('ui-target').innerText = '$' + targetScore;
-      document.getElementById('ui-time').innerText = timeLeft + 's';
-
-      items = generateItems();
-      overlay.classList.add('hidden');
-
-      if (timerInterval) clearInterval(timerInterval);
-      timerInterval = setInterval(() => {
-        if (!isPlaying) return;
-        timeLeft--;
-        document.getElementById('ui-time').innerText = timeLeft + 's';
-        if (timeLeft <= 0) {
-          endGame();
-        }
-      }, 1000);
-    }
-
-    function triggerHook() {
-      if (!isPlaying) return;
-      if (winch.state === 'IDLE') {
-        winch.state = 'SHOOTING';
-      }
-    }
-
-    function endGame() {
-      isPlaying = false;
-      clearInterval(timerInterval);
-
-      const title = document.getElementById('overlay-title');
-      const desc = document.getElementById('overlay-desc');
-
-      if (score >= targetScore) {
-        title.innerText = "MÀN 1 HOÀN TẤT!";
-        desc.innerText = `Em đã kiếm được $${score} vàng. Quá xuất sắc!`;
-      } else {
-        title.innerText = "HẾT GIỜ RỒI!";
-        desc.innerText = `Em đạt $${score} / $${targetScore}. Bấm chơi lại nhé!`;
-      }
-      overlay.classList.remove('hidden');
-    }
-
-    canvas.addEventListener('click', triggerHook);
-
-    function gameLoop() {
-      if (isPlaying) {
-        if (winch.state === 'IDLE') {
-          winch.angle += winch.dir;
-          if (winch.angle > 1.2 || winch.angle < -1.2) {
-            winch.dir *= -1;
-          }
-        } else if (winch.state === 'SHOOTING') {
-          winch.length += winch.speed;
-          const hx = winch.x + Math.sin(winch.angle) * winch.length;
-          const hy = winch.y + Math.cos(winch.angle) * winch.length;
-
-          if (winch.length >= winch.maxLen || hx <= 5 || hx >= canvas.width - 5 || hy >= canvas.height - 5) {
-            winch.state = 'RETURNING';
-          }
-
-          for (let i = items.length - 1; i >= 0; i--) {
-            const it = items[i];
-            if (Math.hypot(hx - it.x, hy - it.y) <= it.r + 8) {
-              winch.item = it;
-              items.splice(i, 1);
-              winch.state = 'RETURNING';
-              break;
-            }
-          }
-        } else if (winch.state === 'RETURNING') {
-          const pullSpeed = winch.item ? Math.max(1, winch.speed / winch.item.weight) : winch.speed;
-          winch.length -= pullSpeed;
-
-          if (winch.length <= winch.minLen) {
-            winch.length = winch.minLen;
-            winch.state = 'IDLE';
-            if (winch.item) {
-              score += winch.item.val;
-              document.getElementById('ui-score').innerText = '$' + score;
-              winch.item = null;
-            }
-          }
-        }
-      }
-
-      // VẼ GIAO DIỆN CANVAS
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      ctx.fillStyle = '#451a03';
-      ctx.fillRect(0, 70, canvas.width, canvas.height - 70);
-
-      ctx.fillStyle = '#15803d';
-      ctx.fillRect(0, 65, canvas.width, 6);
-
-      items.forEach(it => {
-        ctx.save();
-        ctx.beginPath();
-        if (it.type === 'diamond') {
-          ctx.moveTo(it.x, it.y - it.r);
-          ctx.lineTo(it.x + it.r, it.y);
-          ctx.lineTo(it.x, it.y + it.r);
-          ctx.lineTo(it.x - it.r, it.y);
-          ctx.closePath();
-          ctx.fillStyle = '#38bdf8';
-          ctx.fill();
-        } else {
-          ctx.arc(it.x, it.y, it.r, 0, Math.PI * 2);
-          ctx.fillStyle = it.type === 'gold' ? '#f59e0b' : '#64748b';
-          ctx.fill();
-        }
-        ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 11px sans-serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(it.label, it.x, it.y);
-        ctx.restore();
-      });
-
-      const hx = winch.x + Math.sin(winch.angle) * winch.length;
-      const hy = winch.y + Math.cos(winch.angle) * winch.length;
-
-      ctx.strokeStyle = '#fde047';
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.moveTo(winch.x, winch.y);
-      ctx.lineTo(hx, hy);
-      ctx.stroke();
-
-      if (winch.item) {
-        ctx.beginPath();
-        ctx.arc(hx, hy, winch.item.r, 0, Math.PI * 2);
-        ctx.fillStyle = winch.item.type === 'diamond' ? '#38bdf8' : (winch.item.type === 'gold' ? '#f59e0b' : '#64748b');
-        ctx.fill();
-      }
-
-      ctx.fillStyle = '#e2e8f0';
-      ctx.beginPath();
-      ctx.arc(hx, hy, 5, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.fillStyle = '#d97706';
-      ctx.fillRect(winch.x - 22, winch.y - 15, 44, 20);
-
-      requestAnimationFrame(gameLoop);
-    }
-
-    syncDimensions();
-    gameLoop();
-  </script>
-</body>
-</html>
+      <div id="auth-user" class="hidden flex items-center gap-3">
+        <div onclick="switchPage('topup')" class="cursor-pointer bg-slate-800/90 border border-emerald-500/30 px-3 py-1.5 rounded-xl flex items-center gap-2 hover:bg-slate-800 transition">
+          <i class="fas fa-wallet text-emerald-400 text-xs"></i>
+          <span id="user-balance" class="text-xs font-black text-emerald-400">0đ</span>
+          <span class="w-4 h-4 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center text-[10px] font-black">+</span>
+        </div>
+        <div class="relative group">
+          <button class="flex items-center gap-2 bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-700 text-xs font-bold">
+            <i class="fas fa-user-circle text-slate-400 text-base"></i>
+            <span id="user-name" class="max-w-[80px] truncate">User</span>
+          </button>
+          <div class="hidden group-hover:block absolute right-0 mt-1 w-44 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl py-1.5 text-xs font-semibold
+            

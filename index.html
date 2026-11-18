@@ -53,17 +53,41 @@
       <div id="accounts-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
     </section>
 
-    <!-- TOPUP -->
-    <section id="page-topup" class="hidden space-y-3">
-      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-3 text-xs">
-        <h2 class="font-black text-emerald-400 text-sm"><i class="fas fa-wallet mr-1"></i>Nạp Tiền Nhanh</h2>
-        <select id="topup-val" class="w-full p-2.5 bg-slate-950 border border-slate-800 rounded-xl font-bold text-emerald-400">
-          <option value="50000">Nạp 50.000đ</option>
-          <option value="100000" selected>Nạp 100.000đ</option>
-          <option value="200000">Nạp 200.000đ</option>
-          <option value="500000">Nạp 500.000đ</option>
-        </select>
-        <button onclick="doTopup()" class="w-full py-3 bg-emerald-500 text-slate-950 font-black rounded-xl text-xs">XÁC NHẬN NẠP TIỀN</button>
+    <!-- TOPUP (NẠP TIỀN QUA QR CHÍNH CHỦ & CHỜ DUYỆT) -->
+    <section id="page-topup" class="hidden space-y-4">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-4 text-xs">
+        <h2 class="font-black text-emerald-400 text-sm"><i class="fas fa-qrcode mr-1.5"></i>Nạp Tiền Qua Mã QR (MB Bank)</h2>
+        
+        <!-- Khung hiển thị mã QR chính chủ -->
+        <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 flex flex-col items-center text-center space-y-3">
+          <div class="bg-white p-3 rounded-xl shadow-lg">
+            <!-- Sử dụng ảnh QR code chính chủ của user -->
+            <img src="https://i.imgur.com/8QzXJ2j.png" alt="QR Code MB Bank" class="w-48 h-48 object-contain rounded-lg">
+          </div>
+          <div class="space-y-1">
+            <p class="font-bold text-slate-300">Ngân hàng: <span class="text-white">MB Bank (Quân Đội)</span></p>
+            <p class="font-bold text-slate-300">Chủ tài khoản: <span class="text-emerald-400 font-black">DINH HOANG MANH</span></p>
+            <p class="font-bold text-slate-300">Số tài khoản: <span class="text-amber-400 font-black select-all text-sm">0399922379</span></p>
+            <p class="text-[11px] text-slate-400 pt-1">Nội dung chuyển khoản: <b id="qr-memo" class="text-white bg-slate-900 px-2 py-0.5 rounded">NAPTIEN</b></p>
+          </div>
+        </div>
+
+        <!-- Form tạo lệnh nạp từ 50k đến 1 tỷ -->
+        <form onsubmit="doCreateTopup(event)" class="space-y-3">
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Nhập số tiền muốn nạp (Từ 50.000đ đến 1.000.000.000đ):</label>
+            <input type="number" id="topup-amount" min="50000" max="1000000000" step="1000" required placeholder="VD: 200000" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-emerald-400 font-bold text-sm">
+          </div>
+          <button type="submit" class="w-full py-3 bg-emerald-500 text-slate-950 font-black rounded-xl text-xs shadow-lg">
+            TẠO LỆNH CHUYỂN KHOẢN & CHỜ DUYỆT
+          </button>
+        </form>
+      </div>
+
+      <!-- Lịch sử nạp tiền của user -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-3">
+        <h3 class="font-black text-slate-300 text-xs uppercase">Lịch Sử Nạp Tiền & Trạng Thái</h3>
+        <div id="topup-history" class="space-y-2"></div>
       </div>
     </section>
 
@@ -75,8 +99,13 @@
       </div>
     </section>
 
-    <!-- ADMIN -->
-    <section id="page-admin" class="hidden">
+    <!-- ADMIN (QUẢN TRỊ DUYỆT TIỀN & ĐĂNG ACC) -->
+    <section id="page-admin" class="hidden space-y-4">
+      <div class="bg-slate-900 border border-amber-500/40 rounded-2xl p-4 space-y-3 text-xs">
+        <h2 class="font-black text-amber-400 text-sm"><i class="fas fa-wallet mr-1"></i>Duyệt Lệnh Nạp Tiền Của Khách</h2>
+        <div id="admin-topup-list" class="space-y-2"></div>
+      </div>
+
       <div class="bg-slate-900 border border-amber-500/40 rounded-2xl p-4 space-y-3 text-xs">
         <h2 class="font-black text-amber-400 text-sm"><i class="fas fa-crown mr-1"></i>Đăng Bán Acc</h2>
         <form onsubmit="doAddAcc(event)" class="space-y-2.5">
@@ -114,9 +143,10 @@
   </div>
 
   <script>
-    const USERS_KEY = 'df_u_v3';
-    const ACCS_KEY = 'df_a_v3';
-    const CURR_KEY = 'df_c_v3';
+    const USERS_KEY = 'df_u_v4';
+    const ACCS_KEY = 'df_a_v4';
+    const TOPUPS_KEY = 'df_t_v4';
+    const CURR_KEY = 'df_c_v4';
 
     function init() {
       if (!localStorage.getItem(USERS_KEY)) {
@@ -128,6 +158,9 @@
           { id: '102', title: 'Acc Rank Marshal Full Đặc Nhiệm', price: 180000, skins: 'AUG Cyber, 15M Tekniq', user: 'acc_vips2', pass: 'pass456', sold: false }
         ]));
       }
+      if (!localStorage.getItem(TOPUPS_KEY)) {
+        localStorage.setItem(TOPUPS_KEY, JSON.stringify([]));
+      }
       render();
     }
 
@@ -135,6 +168,8 @@
     const setUsers = (d) => localStorage.setItem(USERS_KEY, JSON.stringify(d));
     const getAccs = () => JSON.parse(localStorage.getItem(ACCS_KEY)) || [];
     const setAccs = (d) => localStorage.setItem(ACCS_KEY, JSON.stringify(d));
+    const getTopups = () => JSON.parse(localStorage.getItem(TOPUPS_KEY)) || [];
+    const setTopups = (d) => localStorage.setItem(TOPUPS_KEY, JSON.stringify(d));
     const curr = () => getUsers().find(x => x.u === localStorage.getItem(CURR_KEY)) || null;
     const vnd = (n) => Number(n).toLocaleString('vi-VN') + 'đ';
 
@@ -186,7 +221,12 @@
       if (p === 'admin' && (!u || u.role !== 'admin')) return alert('Chỉ Admin mới vào được!');
       ['home', 'topup', 'history', 'admin'].forEach(id => document.getElementById('page-' + id).classList.add('hidden'));
       document.getElementById('page-' + p).classList.remove('hidden');
+      if (p === 'topup') {
+        document.getElementById('qr-memo').innerText = 'NAPTIEN ' + u.u.toUpperCase();
+        renderTopupHistory();
+      }
       if (p === 'history') renderHistory();
+      if (p === 'admin') renderAdminTopups();
     }
 
     function render() {
@@ -234,14 +274,91 @@
       go('history');
     }
 
-    function doTopup() {
-      const amt = parseInt(document.getElementById('topup-val').value);
+    // TẠO LỆNH NẠP TIỀN CHỜ DUYỆT
+    function doCreateTopup(e) {
+      e.preventDefault();
+      const u = curr();
+      const amt = parseInt(document.getElementById('topup-amount').value);
+      if (amt < 50000 || amt > 1000000000) return alert('Số tiền nạp phải từ 50.000đ đến 1.000.000.000đ!');
+
+      const topups = getTopups();
+      topups.unshift({
+        id: 'TP' + Math.floor(1000 + Math.random() * 9000),
+        user: u.u,
+        amount: amt,
+        status: 'pending', // pending, approved, rejected
+        time: new Date().toLocaleString('vi-VN')
+      });
+      setTopups(topups);
+      e.target.reset();
+      alert('Đã tạo lệnh nạp tiền! Vui lòng chuyển khoản đúng nội dung để Admin xác nhận.');
+      renderTopupHistory();
+    }
+
+    function renderTopupHistory() {
+      const u = curr();
+      const topups = getTopups().filter(x => x.user === u.u);
+      document.getElementById('topup-history').innerHTML = topups.map(t => {
+        let st = t.status === 'pending' ? '<span class="text-amber-400 font-bold">Chờ Admin duyệt</span>' : (t.status === 'approved' ? '<span class="text-emerald-400 font-bold">Đã duyệt (+'+vnd(t.amount)+')</span>' : '<span class="text-red-400 font-bold">Đã từ chối</span>');
+        return `
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs">
+            <div>
+              <b class="text-white">${vnd(t.amount)}</b> <span class="text-slate-500">(${t.time})</span>
+              <p class="mt-0.5">Trạng thái: ${st}</p>
+            </div>
+            <span class="text-[10px] bg-slate-900 px-2 py-1 rounded text-slate-400">#${t.id}</span>
+          </div>
+        `;
+      }).join('') || '<p class="text-slate-500 text-xs">Chưa có lệnh nạp tiền nào.</p>';
+    }
+
+    // ADMIN DUYỆT HOẶC TỪ CHỐI LỆNH NẠP
+    function renderAdminTopups() {
+      const topups = getTopups();
+      document.getElementById('admin-topup-list').innerHTML = topups.map(t => {
+        if (t.status !== 'pending') return '';
+        return `
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 flex justify-between items-center text-xs">
+            <div>
+              <b class="text-white">User: ${t.user}</b> nạp <b class="text-emerald-400">${vnd(t.amount)}</b>
+              <p class="text-slate-500 text-[10px]">${t.time}</p>
+            </div>
+            <div class="flex gap-2">
+              <button onclick="approveTopup('${t.id}')" class="px-3 py-1.5 bg-emerald-500 text-slate-950 font-black rounded-lg">DUYỆT</button>
+              <button onclick="rejectTopup('${t.id}')" class="px-3 py-1.5 bg-red-500 text-white font-black rounded-lg">HỦY</button>
+            </div>
+          </div>
+        `;
+      }).join('') || '<p class="text-slate-500 text-xs">Không có lệnh nạp nào đang chờ duyệt.</p>';
+    }
+
+    function approveTopup(id) {
+      const topups = getTopups();
+      const t = topups.find(x => x.id === id);
+      if (!t || t.status !== 'pending') return;
+
       const users = getUsers();
-      const u = users.find(x => x.u === localStorage.getItem(CURR_KEY));
-      u.bal += amt;
-      setUsers(users);
-      render();
-      alert(`Nạp thành công +${vnd(amt)} vào ví!`);
+      const u = users.find(x => x.u === t.user);
+      if (u) {
+        u.bal += t.amount;
+        t.status = 'approved';
+        setUsers(users);
+        setTopups(topups);
+        render();
+        renderAdminTopups();
+        alert(`Đã duyệt cộng ${vnd(t.amount)} cho tài khoản ${t.user}!`);
+      }
+    }
+
+    function rejectTopup(id) {
+      const topups = getTopups();
+      const t = topups.find(x => x.id === id);
+      if (t) {
+        t.status = 'rejected';
+        setTopups(topups);
+        renderAdminTopups();
+        alert('Đã từ chối lệnh nạp.');
+      }
     }
 
     function renderHistory() {
@@ -263,18 +380,4 @@
         title: document.getElementById('adm-title').value.trim(),
         price: parseInt(document.getElementById('adm-price').value),
         skins: document.getElementById('adm-skins').value.trim(),
-        user: document.getElementById('adm-user').value.trim(),
-        pass: document.getElementById('adm-pass').value.trim(),
-        sold: false
-      });
-      setAccs(accs);
-      e.target.reset();
-      alert('Đăng bán thành công!');
-      go('home');
-      render();
-    }
-
-    init();
-  </script>
-</body>
-</html>
+        user: document.getElem

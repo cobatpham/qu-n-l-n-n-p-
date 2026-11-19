@@ -8,8 +8,10 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
   <style>
     @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-    .animate-marquee { display: inline-block; white-space: nowrap; animation: marquee 22s linear infinite; }
-    .glass { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); }
+    @keyframes shake { 0%,100% { transform: rotate(0deg) scale(1); } 20% { transform: rotate(-7deg) scale(1.04); } 40% { transform: rotate(7deg) scale(1.06); } 60% { transform: rotate(-5deg) scale(1.04); } 80% { transform: rotate(5deg) scale(1.02); } }
+    .animate-marquee { display: inline-block; white-space: nowrap; animation: marquee 24s linear infinite; }
+    .animate-shake { animation: shake 0.45s ease-in-out infinite; }
+    .glass { background: rgba(15, 23, 42, 0.88); backdrop-filter: blur(12px); }
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: #020617; }
     ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 99px; }
@@ -20,7 +22,7 @@
   <!-- LIVE TICKER -->
   <div class="bg-emerald-500/10 border-b border-emerald-500/20 py-1.5 overflow-hidden text-[11px] font-bold text-emerald-400">
     <div class="animate-marquee">
-      🔥 [LIVE] minh_df99 vừa mua Acc #101 M7 Spectrum (350.000đ) &nbsp;•&nbsp; 🎉 [VÒNG QUAY] hoang_pro vừa nổ hũ ACC VIP Dao Dark Star &nbsp;•&nbsp; 💰 [NẠP TIỀN] kiet_vn vừa nạp thành công 500.000đ &nbsp;•&nbsp; ⚡ Đăng ký mới nhận ngay 50.000đ trải nghiệm!
+      🔥 [SHOP] minh_df99 vừa mua Acc #101 M7 Spectrum (650.000đ) &nbsp;•&nbsp; 🎁 [TÚI MÙ 399K] kiet_s12 vừa xé trúng ACC SIÊU VIP Marshal + Dark Star &nbsp;•&nbsp; 🎉 [VÒNG QUAY X10] hoang_pro vừa nổ 3 ACC VIP liền &nbsp;•&nbsp; ⚡ Đăng ký mới nhận ngay 50.000đ!
     </div>
   </div>
 
@@ -56,12 +58,13 @@
 
     <!-- NAV -->
     <nav class="bg-slate-900/90 border-t border-slate-800/80">
-      <div class="max-w-5xl mx-auto px-2 flex justify-around sm:justify-center sm:gap-8 py-2 text-xs font-bold text-slate-400 overflow-x-auto">
-        <button data-nav="home" onclick="go('home')" class="nav-btn px-2 py-1 rounded-lg hover:text-emerald-400 transition whitespace-nowrap"><i class="fas fa-store mr-1.5 text-emerald-400"></i>Shop Acc</button>
-        <button data-nav="wheel" onclick="go('wheel')" class="nav-btn px-2 py-1 rounded-lg hover:text-amber-400 transition whitespace-nowrap"><i class="fas fa-dharmachakra mr-1.5 text-amber-400"></i>Vòng Quay VIP</button>
-        <button data-nav="topup" onclick="go('topup')" class="nav-btn px-2 py-1 rounded-lg hover:text-yellow-400 transition whitespace-nowrap"><i class="fas fa-qrcode mr-1.5 text-yellow-400"></i>Nạp Tiền</button>
-        <button data-nav="history" onclick="go('history')" class="nav-btn px-2 py-1 rounded-lg hover:text-cyan-400 transition whitespace-nowrap"><i class="fas fa-key mr-1.5 text-cyan-400"></i>Đã Mua</button>
-        <button id="nav-admin" data-nav="admin" onclick="go('admin')" class="nav-btn hidden px-2 py-1 rounded-lg text-amber-400 hover:bg-amber-500/10 transition whitespace-nowrap"><i class="fas fa-crown mr-1.5"></i>Admin</button>
+      <div class="max-w-5xl mx-auto px-2 flex justify-start sm:justify-center gap-2 sm:gap-6 py-2 text-xs font-bold text-slate-400 overflow-x-auto">
+        <button data-nav="home" onclick="go('home')" class="nav-btn px-2.5 py-1.5 rounded-lg hover:text-emerald-400 transition whitespace-nowrap"><i class="fas fa-store mr-1.5 text-emerald-400"></i>Shop Acc</button>
+        <button data-nav="wheel" onclick="go('wheel')" class="nav-btn px-2.5 py-1.5 rounded-lg hover:text-amber-400 transition whitespace-nowrap"><i class="fas fa-dharmachakra mr-1.5 text-amber-400"></i>Vòng Quay</button>
+        <button data-nav="bag" onclick="go('bag')" class="nav-btn px-2.5 py-1.5 rounded-lg hover:text-fuchsia-400 transition whitespace-nowrap"><i class="fas fa-gift mr-1.5 text-fuchsia-400"></i>Túi Mù</button>
+        <button data-nav="topup" onclick="go('topup')" class="nav-btn px-2.5 py-1.5 rounded-lg hover:text-yellow-400 transition whitespace-nowrap"><i class="fas fa-qrcode mr-1.5 text-yellow-400"></i>Nạp Tiền</button>
+        <button data-nav="history" onclick="go('history')" class="nav-btn px-2.5 py-1.5 rounded-lg hover:text-cyan-400 transition whitespace-nowrap"><i class="fas fa-key mr-1.5 text-cyan-400"></i>Đã Mua</button>
+        <button id="nav-admin" data-nav="admin" onclick="go('admin')" class="nav-btn hidden px-2.5 py-1.5 rounded-lg text-amber-400 hover:bg-amber-500/10 transition whitespace-nowrap"><i class="fas fa-crown mr-1.5"></i>Admin</button>
       </div>
     </nav>
   </header>
@@ -71,7 +74,6 @@
 
     <!-- PAGE: HOME -->
     <section id="page-home" class="space-y-6">
-      <!-- HERO -->
       <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-emerald-950/50 to-slate-900 border border-emerald-500/30 p-6 shadow-2xl">
         <div class="absolute -right-10 -top-10 w-52 h-52 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none"></div>
         <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-5">
@@ -80,7 +82,7 @@
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span> Season 12: Aurora Ready
             </span>
             <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight">HỆ THỐNG BÁN ACC <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">DELTA FORCE VN</span></h1>
-            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">Giao dịch tự động nhận acc trong 1 giây • Bảo hành trắng thông tin • Đăng ký tài khoản mới nhận ngay <b class="text-emerald-400">50.000đ</b> vào ví!</p>
+            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">Mua acc nhận ngay trong 1 giây • Vòng quay X1/X10 & Xé Túi Mù cực cháy • Đăng ký mới tặng <b class="text-emerald-400">50.000đ</b>!</p>
           </div>
           <div class="grid grid-cols-3 gap-2.5 text-center shrink-0">
             <div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-3">
@@ -88,7 +90,7 @@
               <div class="text-[10px] text-slate-400 font-bold uppercase">Acc Sẵn</div>
             </div>
             <div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-3">
-              <div class="text-lg font-black text-amber-400">1.4K+</div>
+              <div class="text-lg font-black text-amber-400">1.8K+</div>
               <div class="text-[10px] text-slate-400 font-bold uppercase">Đã Bán</div>
             </div>
             <div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-3">
@@ -124,38 +126,58 @@
       <div id="accounts-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
     </section>
 
-    <!-- PAGE: WHEEL -->
+    <!-- PAGE: WHEEL (X1 & X10) -->
     <section id="page-wheel" class="hidden space-y-5">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-        <div class="lg:col-span-7 bg-slate-900 border border-amber-500/30 rounded-3xl p-6 text-center space-y-5 shadow-2xl relative overflow-hidden">
+        <div class="lg:col-span-7 bg-slate-900 border border-amber-500/30 rounded-3xl p-6 text-center space-y-5 shadow-2xl">
           <div class="space-y-1">
-            <span class="px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/30 text-[10px] font-black text-amber-400 uppercase tracking-widest">Minigame Thử Vận May</span>
+            <span class="px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/30 text-[10px] font-black text-amber-400 uppercase tracking-widest">Vòng Quay Siêu Tốc</span>
             <h2 class="text-xl font-black text-white">VÒNG QUAY ACC <span class="text-amber-400">DELTA FORCE</span></h2>
-            <p class="text-xs text-slate-400">Phí quay: <b class="text-amber-400">20.000đ / lượt</b> • Tỷ lệ chuẩn: <b class="text-emerald-400">25% ACC VIP</b> / <b class="text-slate-300">75% ACC THƯỜNG</b></p>
+            <p class="text-xs text-slate-400">Tỷ lệ chuẩn từng lượt: <b class="text-emerald-400">25% ACC VIP</b> / <b class="text-slate-300">75% ACC THƯỜNG</b></p>
           </div>
 
           <div class="relative w-[300px] h-[300px] mx-auto my-2">
-            <!-- Pointer -->
             <div class="absolute -top-3 left-1/2 -translate-x-1/2 z-20 text-amber-400 drop-shadow-[0_2px_6px_rgba(245,158,11,0.8)]">
               <i class="fas fa-caret-down text-4xl"></i>
             </div>
-            <!-- Canvas -->
             <canvas id="wheel-canvas" width="300" height="300" class="rounded-full border-4 border-amber-500/60 shadow-[0_0_35px_rgba(245,158,11,0.2)]" style="transition: transform 4s cubic-bezier(0.15, 0.85, 0.15, 1);"></canvas>
-            <!-- Center Hub -->
             <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-slate-950 border-4 border-amber-400 flex items-center justify-center font-black text-amber-400 text-xs shadow-xl z-10">
               VIP
             </div>
           </div>
 
-          <button id="btn-spin" onclick="doSpinWheel()" class="w-full max-w-xs mx-auto py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black text-sm shadow-lg shadow-amber-500/25 hover:opacity-95 active:scale-95 transition">
-            <i class="fas fa-play mr-1.5"></i>QUAY NGAY (20.000Đ)
-          </button>
+          <div class="grid grid-cols-2 gap-3 max-w-md mx-auto">
+            <button id="btn-spin-1" onclick="doSpinWheel(1)" class="py-3.5 px-3 rounded-2xl bg-slate-800 hover:bg-slate-700 border border-amber-500/40 text-amber-400 font-black text-xs active:scale-95 transition">
+              <i class="fas fa-play mr-1"></i>QUAY 1 VÒNG<span class="block text-[10px] text-slate-300 font-bold mt-0.5">20.000đ</span>
+            </button>
+            <button id="btn-spin-10" onclick="doSpinWheel(10)" class="py-3.5 px-3 rounded-2xl bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black text-xs shadow-lg shadow-amber-500/25 hover:opacity-95 active:scale-95 transition">
+              <i class="fas fa-bolt mr-1"></i>QUAY 10 VÒNG<span class="block text-[10px] text-slate-900 font-extrabold mt-0.5">200.000đ</span>
+            </button>
+          </div>
         </div>
 
         <div class="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-3xl p-5 space-y-4">
           <h3 class="font-black text-sm text-white flex items-center gap-2"><i class="fas fa-trophy text-amber-400"></i>Lịch Sử Quay Gần Đây</h3>
-          <div id="spin-history" class="space-y-2.5 max-h-[380px] overflow-y-auto pr-1"></div>
+          <div id="spin-history" class="space-y-2.5 max-h-[390px] overflow-y-auto pr-1"></div>
         </div>
+      </div>
+    </section>
+
+    <!-- PAGE: BLIND BAG (TÚI MÙ 99K - 199K - 299K - 399K) -->
+    <section id="page-bag" class="hidden space-y-5">
+      <div class="bg-gradient-to-r from-slate-900 via-fuchsia-950/40 to-slate-900 border border-fuchsia-500/30 rounded-3xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <span class="px-2.5 py-0.5 rounded-full bg-fuchsia-500/20 border border-fuchsia-500/30 text-[10px] font-black text-fuchsia-400 uppercase tracking-widest">Xé Túi Mù Delta Force</span>
+          <h2 class="text-xl font-black text-white mt-1">TÚI MÙ NHÂN PHẨM <span class="text-fuchsia-400">99K • 199K • 299K • 399K</span></h2>
+          <p class="text-xs text-slate-400 mt-0.5">100% mở ra tài khoản đúng mật khẩu • Túi càng cao, tỷ lệ nổ Acc Đồ Đỏ & M7 Spectrum càng khủng!</p>
+        </div>
+      </div>
+
+      <div id="bag-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"></div>
+
+      <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 space-y-3">
+        <h3 class="font-black text-sm text-white flex items-center gap-2"><i class="fas fa-box-open text-fuchsia-400"></i>Lịch Sử Xé Túi Mù</h3>
+        <div id="bag-history" class="grid grid-cols-1 md:grid-cols-2 gap-2.5 max-h-64 overflow-y-auto pr-1"></div>
       </div>
     </section>
 
@@ -205,7 +227,7 @@
                 <label class="block text-slate-400 font-bold mb-1">Số tiền nạp (VNĐ):</label>
                 <input type="number" id="topup-amount" oninput="updateQR()" min="50000" max="1000000000" step="1000" required placeholder="Nhập từ 50.000 đến 1.000.000.000" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-emerald-400 font-black text-sm focus:outline-none focus:border-emerald-500">
               </div>
-              <p class="text-[11px] text-slate-400"><i class="fas fa-info-circle text-emerald-400 mr-1"></i>Khách nạp xong chuyển khoản rồi bấm tạo lệnh chờ Admin duyệt. Riêng Admin tự nạp sẽ cộng thẳng vào ví.</p>
+              <p class="text-[11px] text-slate-400"><i class="fas fa-info-circle text-emerald-400 mr-1"></i>Khách chuyển khoản rồi bấm tạo lệnh chờ Admin duyệt. Riêng Admin tự nạp sẽ cộng thẳng vào ví.</p>
               <button type="submit" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-400 text-slate-950 font-black text-xs shadow-lg shadow-emerald-500/20">
                 XÁC NHẬN ĐÃ CHUYỂN KHOẢN
               </button>
@@ -223,7 +245,7 @@
     <!-- PAGE: HISTORY -->
     <section id="page-history" class="hidden space-y-4">
       <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 space-y-4">
-        <h2 class="font-black text-white text-sm flex items-center gap-2"><i class="fas fa-key text-cyan-400"></i>Kho Tài Khoản Đã Mua & Trúng Thưởng</h2>
+        <h2 class="font-black text-white text-sm flex items-center gap-2"><i class="fas fa-key text-cyan-400"></i>Kho Tài Khoản Đã Mua, Quay & Xé Túi Mù</h2>
         <div id="purchased-logs" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
       </div>
     </section>
@@ -236,13 +258,11 @@
         <button onclick="switchAdmTab('users')" id="admtab-users" class="px-4 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 font-bold text-xs"><i class="fas fa-users mr-1.5"></i>Thành Viên</button>
       </div>
 
-      <!-- ADMIN TAB 1: TOPUPS -->
       <div id="adm-panel-topups" class="bg-slate-900 border border-amber-500/30 rounded-3xl p-5 space-y-3 text-xs">
         <h2 class="font-black text-amber-400 text-sm">Danh Sách Đơn Nạp Chờ Duyệt</h2>
         <div id="admin-topup-list" class="space-y-2.5"></div>
       </div>
 
-      <!-- ADMIN TAB 2: ACCS -->
       <div id="adm-panel-accs" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-5 text-xs">
         <div class="lg:col-span-5 bg-slate-900 border border-amber-500/30 rounded-3xl p-5 space-y-3">
           <h2 class="font-black text-amber-400 text-sm">Đăng Bán Acc Mới</h2>
@@ -269,7 +289,6 @@
         </div>
       </div>
 
-      <!-- ADMIN TAB 3: USERS -->
       <div id="adm-panel-users" class="hidden bg-slate-900 border border-amber-500/30 rounded-3xl p-5 space-y-3 text-xs">
         <h2 class="font-black text-amber-400 text-sm">Quản Lý Thành Viên & Số Dư</h2>
         <div id="admin-user-list" class="space-y-2.5"></div>
@@ -278,7 +297,6 @@
 
   </main>
 
-  <!-- FOOTER -->
   <footer class="border-t border-slate-900 py-5 text-center text-[11px] text-slate-500">
     DELTASHOP VN © 2026 • Hệ thống giao dịch tài khoản Delta Force Garena VN
   </footer>
@@ -304,32 +322,35 @@
     </div>
   </div>
 
-  <!-- REWARD MODAL -->
-  <div id="reward-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-slate-900 border border-amber-500/50 w-full max-w-sm rounded-3xl p-6 text-center space-y-4 shadow-2xl">
-      <div id="rw-icon" class="text-4xl">🎉</div>
-      <h3 id="rw-title" class="text-base font-black text-emerald-400"></h3>
-      <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 text-xs space-y-2 text-left">
-        <div class="flex justify-between items-center">
-          <span class="text-slate-400">Tài khoản:</span>
-          <div class="flex items-center gap-2"><b id="rw-user" class="text-white"></b><button onclick="copyText(document.getElementById('rw-user').innerText)" class="text-emerald-400"><i class="fas fa-copy"></i></button></div>
-        </div>
-        <div class="flex justify-between items-center">
-          <span class="text-slate-400">Mật khẩu:</span>
-          <div class="flex items-center gap-2"><b id="rw-pass" class="text-amber-400"></b><button onclick="copyText(document.getElementById('rw-pass').innerText)" class="text-emerald-400"><i class="fas fa-copy"></i></button></div>
-        </div>
+  <!-- BAG OPENING OVERLAY -->
+  <div id="bag-anim-modal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="text-center space-y-4">
+      <div class="w-28 h-28 mx-auto rounded-3xl bg-gradient-to-br from-fuchsia-500 to-amber-400 flex items-center justify-center text-5xl text-slate-950 shadow-[0_0_50px_rgba(217,70,239,0.5)] animate-shake">
+        <i class="fas fa-gift"></i>
       </div>
+      <div id="bag-anim-text" class="text-sm font-black text-fuchsia-300 tracking-wider uppercase">ĐANG XÉ TÚI MÙ...</div>
+    </div>
+  </div>
+
+  <!-- REWARD MODAL (HỖ TRỢ 1 HOẶC 10 ACC) -->
+  <div id="reward-modal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-amber-500/50 w-full max-w-md rounded-3xl p-5 text-center space-y-4 shadow-2xl">
+      <div id="rw-icon" class="text-4xl">🎉</div>
+      <div>
+        <h3 id="rw-title" class="text-base font-black text-emerald-400"></h3>
+        <p id="rw-sub" class="text-[11px] text-slate-400 mt-0.5"></p>
+      </div>
+      <div id="rw-list" class="space-y-2 max-h-72 overflow-y-auto pr-1 text-left"></div>
       <button onclick="closeModal('reward-modal')" class="w-full py-3 rounded-xl bg-emerald-500 text-slate-950 font-black text-xs">NHẬN ACC & ĐÓNG</button>
     </div>
   </div>
 
   <!-- TOAST -->
-  <div id="toast" class="fixed bottom-5 right-5 z-50 hidden px-4 py-3 rounded-2xl bg-slate-900 border border-emerald-500/50 text-xs font-bold text-white shadow-2xl flex items-center gap-2">
-    <i class="fas fa-check-circle text-emerald-400"></i><span id="toast-msg"></span>
-  </div>
+  <div id="toast" class="fixed bottom-5 right-5 z-50 hidden px-4 py-3 rounded-2xl bg-slate-900 border border-emerald-500/50 text-xs font-bold text-white shadow-2xl flex items-center gap-2"></div>
 
   <script>
-    const K = { U: 'df_pro_u', A: 'df_pro_a', T: 'df_pro_t', S: 'df_pro_s', C: 'df_pro_c' };
+    const K = { U: 'df_pro_u', A: 'df_pro_a', T: 'df_pro_t', S: 'df_pro_s', B: 'df_pro_b', C: 'df_pro_c' };
+
     const DEFAULT_ACCS = [
       { id: '101', title: 'Acc VIP M7 Spectrum + Dao Dark Star', rank: 'Marshal', price: 650000, skins: 'M7 Spectrum S2, Dao Dark Star, 28M Tekniq', user: 'df_marshal01', pass: 'Delta@2026', sold: false, color: '#10b981' },
       { id: '102', title: 'Acc Đồ Đỏ Zero Dam + Full Đặc Nhiệm', rank: 'Marshal', price: 480000, skins: 'Kho 12 Đồ Đỏ, M4A1 Cyber, 18M Tekniq', user: 'df_zerodam02', pass: 'Zero#9988', sold: false, color: '#f59e0b' },
@@ -350,7 +371,38 @@
       { label: 'Acc Thường', vip: false, bg: '#1e293b', fg: '#cbd5e1' }
     ];
 
-    let wheelRot = 0, isSpinning = false, toastTimer = null;
+    const BLIND_BAGS = [
+      {
+        id: 'bag99', name: 'TÚI MÙ 99K', tag: 'Tân Binh', price: 99000, vipRate: 0.20,
+        border: 'border-cyan-500/40', grad: 'from-cyan-500 to-blue-500', text: 'text-cyan-400',
+        perks: ['100% Trúng Acc Trắng Info', '20% Nổ Acc VIP + Đồ Đỏ', '80% Acc Platinum - Colonel'],
+        vipPool: ['Acc VIP Đồ Đỏ Zero Dam + 10M Tekniq', 'Acc VIP M4A1 Cyber + Rank General'],
+        normPool: ['Acc Rank Platinum + 3M Tekniq', 'Acc Rank Colonel + Kho Giáp 5']
+      },
+      {
+        id: 'bag199', name: 'TÚI MÙ 199K', tag: 'Đặc Nhiệm', price: 199000, vipRate: 0.40,
+        border: 'border-emerald-500/40', grad: 'from-emerald-500 to-teal-400', text: 'text-emerald-400',
+        perks: ['100% Acc Có Skin Súng', '40% Nổ Acc VIP Skin Hiếm', '60% Acc Colonel - General'],
+        vipPool: ['Acc VIP M7 Spectrum S2 + 15M Tekniq', 'Acc VIP Kho 8 Đồ Đỏ + Rank General'],
+        normPool: ['Acc General + M416 Tactical', 'Acc Colonel Full Đặc Nhiệm + 7M Tekniq']
+      },
+      {
+        id: 'bag299', name: 'TÚI MÙ 299K', tag: 'Săn Đồ Đỏ', price: 299000, vipRate: 0.65,
+        border: 'border-fuchsia-500/40', grad: 'from-fuchsia-500 to-purple-500', text: 'text-fuchsia-400',
+        perks: ['100% Acc Rank Cao', '65% Nổ Acc VIP Full Đồ Đỏ', '35% Acc General 12M+ Tekniq'],
+        vipPool: ['Acc VIP M7 Spectrum + Dao Dark Star', 'Acc VIP Marshal + Kho 15 Đồ Đỏ'],
+        normPool: ['Acc General Full Giáp 6 + 12M Tekniq', 'Acc General AUG Neon + AWM Frost']
+      },
+      {
+        id: 'bag399', name: 'TÚI MÙ 399K', tag: 'Siêu VIP', price: 399000, vipRate: 0.90,
+        border: 'border-amber-500/50', grad: 'from-amber-500 to-yellow-400', text: 'text-amber-400',
+        perks: ['90% Nổ Siêu VIP Marshal', 'Có Tỷ Lệ Ra Full M7 + Dark Star', 'Kho Tekniq 20M - 50M+'],
+        vipPool: ['SIÊU VIP Marshal Full M7 Spectrum + Dark Star', 'SIÊU VIP 25 Đồ Đỏ + 45M Tekniq + Full Súng'],
+        normPool: ['Acc VIP General + M7 Spectrum + 15M Tekniq']
+      }
+    ];
+
+    let wheelRot = 0, isSpinning = false, isOpeningBag = false, toastTimer = null;
 
     const get = (k) => JSON.parse(localStorage.getItem(k)) || [];
     const set = (k, v) => localStorage.setItem(k, JSON.stringify(v));
@@ -372,13 +424,13 @@
     function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 
     function init() {
-      if (!localStorage.getItem(K.U)) {
-        set(K.U, [{ u: 'admin', p: '123456', bal: 5000000, role: 'admin', bought: [] }]);
-      }
+      if (!localStorage.getItem(K.U)) set(K.U, [{ u: 'admin', p: '123456', bal: 5000000, role: 'admin', bought: [] }]);
       if (!localStorage.getItem(K.A)) set(K.A, DEFAULT_ACCS);
       if (!localStorage.getItem(K.T)) set(K.T, []);
       if (!localStorage.getItem(K.S)) set(K.S, []);
+      if (!localStorage.getItem(K.B)) set(K.B, []);
       drawWheel();
+      renderBags();
       renderAll();
     }
 
@@ -429,9 +481,9 @@
 
     function go(p) {
       const u = curr();
-      if ((p === 'topup' || p === 'history' || p === 'wheel') && !u) return openAuth('login');
-      if (p === 'admin' && (!u || u.role !== 'admin')) return toast('Chỉ Admin mới có quyền truy cập!', true);
-      ['home', 'wheel', 'topup', 'history', 'admin'].forEach(id => document.getElementById('page-' + id).classList.add('hidden'));
+      if (['topup', 'history', 'wheel', 'bag'].includes(p) && !u) return openAuth('login');
+      if (p === 'admin' && (!u || u.role !== 'admin')) return toast('Chỉ Admin mới vào được!', true);
+      ['home', 'wheel', 'bag', 'topup', 'history', 'admin'].forEach(id => document.getElementById('page-' + id).classList.add('hidden'));
       document.getElementById('page-' + p).classList.remove('hidden');
       document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('bg-slate-800', b.dataset.nav === p));
       if (p === 'topup') {
@@ -440,6 +492,7 @@
         renderTopupHistory();
       }
       if (p === 'wheel') renderSpinHistory();
+      if (p === 'bag') renderBagHistory();
       if (p === 'history') renderHistory();
       if (p === 'admin') renderAdmin();
     }
@@ -520,12 +573,14 @@
       const uObj = users.find(x => x.u === u.u);
       uObj.bal -= a.price;
       a.sold = true;
-      uObj.bought.unshift({ id: a.id, title: a.title, user: a.user, pass: a.pass, type: 'Shop Mua', time: new Date().toLocaleString('vi-VN') });
+      const item = { id: a.id, title: a.title, user: a.user, pass: a.pass, type: 'Shop Mua', vip: true, time: new Date().toLocaleString('vi-VN') };
+      uObj.bought.unshift(item);
       set(K.U, users); set(K.A, accs);
       renderAll();
-      showRewardModal('MUA ACC THÀNH CÔNG!', a.user, a.pass, true);
+      showRewardModal('MUA ACC THÀNH CÔNG!', 'Tài khoản đã được lưu vào mục Đã Mua.', [item], true);
     }
 
+    // ===== VÒNG QUAY 1 LƯỢT / 10 LƯỢT =====
     function drawWheel() {
       const canvas = document.getElementById('wheel-canvas');
       if (!canvas) return;
@@ -554,26 +609,51 @@
       });
     }
 
-    function doSpinWheel() {
+    function doSpinWheel(count = 1) {
       if (isSpinning) return;
       const u = curr();
       if (!u) return openAuth('login');
-      if (u.bal < 20000) { toast('Cần 20.000đ mỗi lượt quay!', true); return go('topup'); }
+      const cost = count * 20000;
+      if (u.bal < cost) { toast(`Cần ${vnd(cost)} để quay ${count} vòng!`, true); return go('topup'); }
 
       isSpinning = true;
-      const btn = document.getElementById('btn-spin');
-      btn.disabled = true;
-      btn.classList.add('opacity-60');
+      ['btn-spin-1', 'btn-spin-10'].forEach(id => {
+        const b = document.getElementById(id);
+        b.disabled = true; b.classList.add('opacity-50');
+      });
 
       const users = get(K.U);
-      const uObj = users.find(x => x.u === u.u);
-      uObj.bal -= 20000;
+      users.find(x => x.u === u.u).bal -= cost;
       set(K.U, users);
       renderAll();
 
-      // Tỷ lệ chuẩn 25% VIP / 75% Thường
-      const isVip = Math.random() < 0.25;
-      const pool = isVip ? [0, 4] : [1, 2, 3, 5, 6, 7];
+      // Roll độc lập từng lượt (25% VIP / 75% Cùi)
+      const now = new Date().toLocaleString('vi-VN');
+      const results = [];
+      for (let i = 0; i < count; i++) {
+        const isVip = Math.random() < 0.25;
+        results.push(isVip ? {
+          id: 'VIP' + Math.floor(100 + Math.random() * 899),
+          title: 'ACC VIP M7 Spectrum + Dark Star',
+          user: 'df_vip_' + Math.floor(1000 + Math.random() * 8999),
+          pass: 'Vip@' + Math.floor(1000 + Math.random() * 8999),
+          type: count === 10 ? 'Quay X10 (VIP)' : 'Vòng Quay VIP',
+          vip: true,
+          time: now
+        } : {
+          id: 'NOR' + Math.floor(100 + Math.random() * 899),
+          title: 'Acc Delta Force Thường (Cùi)',
+          user: 'df_cui_' + Math.floor(1000 + Math.random() * 8999),
+          pass: 'Cui@' + Math.floor(1000 + Math.random() * 8999),
+          type: count === 10 ? 'Quay X10' : 'Vòng Quay Thường',
+          vip: false,
+          time: now
+        });
+      }
+
+      const vipCount = results.filter(r => r.vip).length;
+      const hasVip = vipCount > 0;
+      const pool = hasVip ? [0, 4] : [1, 2, 3, 5, 6, 7];
       const idx = pool[Math.floor(Math.random() * pool.length)];
 
       const sliceDeg = 360 / WHEEL_SLICES.length;
@@ -587,45 +667,30 @@
       document.getElementById('wheel-canvas').style.transform = `rotate(${wheelRot}deg)`;
 
       setTimeout(() => {
-        const reward = isVip ? {
-          id: 'VIP' + Math.floor(100 + Math.random() * 899),
-          title: 'ACC VIP M7 Spectrum + Dark Star',
-          user: 'df_vip_' + Math.floor(1000 + Math.random() * 8999),
-          pass: 'Vip@' + Math.floor(1000 + Math.random() * 8999),
-          type: 'Vòng Quay VIP',
-          time: new Date().toLocaleString('vi-VN')
-        } : {
-          id: 'NOR' + Math.floor(100 + Math.random() * 899),
-          title: 'Acc Delta Force Thường (Cùi)',
-          user: 'df_cui_' + Math.floor(1000 + Math.random() * 8999),
-          pass: 'Cui@' + Math.floor(1000 + Math.random() * 8999),
-          type: 'Vòng Quay Thường',
-          time: new Date().toLocaleString('vi-VN')
-        };
-
         const users2 = get(K.U);
-        users2.find(x => x.u === u.u).bought.unshift(reward);
+        const uObj = users2.find(x => x.u === u.u);
+        uObj.bought = [...results, ...(uObj.bought || [])];
         set(K.U, users2);
 
         const spins = get(K.S);
-        spins.unshift({ user: u.u, title: reward.title, vip: isVip, time: reward.time });
-        set(K.S, spins.slice(0, 20));
+        const newLogs = results.map(r => ({ user: u.u, title: r.title, vip: r.vip, time: now }));
+        set(K.S, [...newLogs, ...spins].slice(0, 30));
 
         renderSpinHistory();
-        showRewardModal(isVip ? '🎉 NỔ HŨ ACC VIP!' : '🛡️ TRÚNG ACC THƯỜNG', reward.user, reward.pass, isVip);
-        isSpinning = false;
-        btn.disabled = false;
-        btn.classList.remove('opacity-60');
-      }, 4100);
-    }
+        const modalTitle = count === 10
+          ? (hasVip ? `🔥 QUAY X10 NỔ ${vipCount} ACC VIP!` : '🛡️ KẾT QUẢ QUAY 10 VÒNG')
+          : (hasVip ? '🎉 NỔ HŨ ACC VIP!' : '🛡️ TRÚNG ACC THƯỜNG');
+        const modalSub = count === 10
+          ? `Trúng ${vipCount} Acc VIP & ${10 - vipCount} Acc Thường (Đã lưu vào Đã Mua)`
+          : 'Tài khoản đã được lưu vào mục Đã Mua';
 
-    function showRewardModal(title, user, pass, isVip) {
-      document.getElementById('rw-icon').innerText = isVip ? '🏆' : '🎮';
-      document.getElementById('rw-title').innerText = title;
-      document.getElementById('rw-title').className = `text-base font-black ${isVip ? 'text-amber-400' : 'text-emerald-400'}`;
-      document.getElementById('rw-user').innerText = user;
-      document.getElementById('rw-pass').innerText = pass;
-      document.getElementById('reward-modal').classList.remove('hidden');
+        showRewardModal(modalTitle, modalSub, results, hasVip);
+        isSpinning = false;
+        ['btn-spin-1', 'btn-spin-10'].forEach(id => {
+          const b = document.getElementById(id);
+          b.disabled = false; b.classList.remove('opacity-50');
+        });
+      }, 4100);
     }
 
     function renderSpinHistory() {
@@ -641,10 +706,119 @@
       `).join('') || '<p class="text-slate-500 text-xs text-center py-6">Chưa có lượt quay nào.</p>';
     }
 
-    function setAmt(n) {
-      document.getElementById('topup-amount').value = n;
-      updateQR();
+    // ===== TÚI MÙ 99K / 199K / 299K / 399K =====
+    function renderBags() {
+      document.getElementById('bag-grid').innerHTML = BLIND_BAGS.map(b => `
+        <div class="bg-slate-900 border ${b.border} rounded-3xl p-4 flex flex-col justify-between gap-4 shadow-xl hover:-translate-y-1 transition">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full bg-slate-950 border ${b.border} ${b.text}">${b.tag}</span>
+              <span class="text-xs font-black ${b.text}">${vnd(b.price)}</span>
+            </div>
+            <div class="h-28 rounded-2xl bg-slate-950 border border-slate-800 flex flex-col items-center justify-center relative overflow-hidden">
+              <div class="w-14 h-14 rounded-2xl bg-gradient-to-br ${b.grad} text-slate-950 flex items-center justify-center text-2xl font-black shadow-lg">
+                <i class="fas fa-gift"></i>
+              </div>
+              <div class="text-xs font-black text-white mt-2 tracking-wide">${b.name}</div>
+            </div>
+            <ul class="space-y-1.5 text-[11px] text-slate-300">
+              ${b.perks.map(p => `<li class="flex items-start gap-1.5"><i class="fas fa-check ${b.text} mt-0.5 text-[10px]"></i><span>${p}</span></li>`).join('')}
+            </ul>
+          </div>
+          <button onclick="openBlindBag('${b.id}')" class="w-full py-3 rounded-xl bg-gradient-to-r ${b.grad} text-slate-950 font-black text-xs shadow-lg hover:opacity-90 active:scale-95 transition">
+            XÉ TÚI NGAY (${vnd(b.price)})
+          </button>
+        </div>
+      `).join('');
     }
+
+    function openBlindBag(bagId) {
+      if (isOpeningBag) return;
+      const u = curr();
+      if (!u) return openAuth('login');
+      const bag = BLIND_BAGS.find(x => x.id === bagId);
+      if (!bag) return;
+      if (u.bal < bag.price) { toast(`Không đủ ${vnd(bag.price)} để xé ${bag.name}!`, true); return go('topup'); }
+
+      isOpeningBag = true;
+      const users = get(K.U);
+      users.find(x => x.u === u.u).bal -= bag.price;
+      set(K.U, users);
+      renderAll();
+
+      document.getElementById('bag-anim-text').innerText = `ĐANG XÉ ${bag.name}...`;
+      document.getElementById('bag-anim-modal').classList.remove('hidden');
+
+      setTimeout(() => {
+        closeModal('bag-anim-modal');
+        const isVip = Math.random() < bag.vipRate;
+        const pool = isVip ? bag.vipPool : bag.normPool;
+        const title = pool[Math.floor(Math.random() * pool.length)];
+        const now = new Date().toLocaleString('vi-VN');
+        const item = {
+          id: 'TM' + Math.floor(100 + Math.random() * 899),
+          title: title,
+          user: (isVip ? 'df_tmvip_' : 'df_tm_') + Math.floor(1000 + Math.random() * 8999),
+          pass: (isVip ? 'TmVip@' : 'Delta@') + Math.floor(1000 + Math.random() * 8999),
+          type: bag.name,
+          vip: isVip,
+          time: now
+        };
+
+        const users2 = get(K.U);
+        users2.find(x => x.u === u.u).bought.unshift(item);
+        set(K.U, users2);
+
+        const logs = get(K.B);
+        logs.unshift({ user: u.u, bag: bag.name, title: item.title, vip: isVip, time: now });
+        set(K.B, logs.slice(0, 20));
+
+        renderBagHistory();
+        showRewardModal(isVip ? `🔥 XÉ ${bag.name} NỔ HÀNG VIP!` : `🎁 MỞ ${bag.name} THÀNH CÔNG`, 'Đã lưu tài khoản vào mục Đã Mua.', [item], isVip);
+        isOpeningBag = false;
+      }, 1100);
+    }
+
+    function renderBagHistory() {
+      const logs = get(K.B);
+      document.getElementById('bag-history').innerHTML = logs.map(l => `
+        <div class="bg-slate-950 p-3 rounded-xl border ${l.vip ? 'border-fuchsia-500/40' : 'border-slate-800'} flex justify-between items-center text-xs gap-2">
+          <div>
+            <b class="${l.vip ? 'text-fuchsia-400' : 'text-slate-200'}">${l.user}</b> <span class="text-[10px] text-slate-500">(${l.bag})</span>
+            <p class="text-[11px] text-slate-400">${l.title}</p>
+          </div>
+          <span class="text-[10px] text-slate-500 shrink-0">${l.time.split(' ')[0]}</span>
+        </div>
+      `).join('') || '<p class="col-span-full text-slate-500 text-xs text-center py-5">Chưa ai xé túi mù.</p>';
+    }
+
+    // ===== REWARD MODAL CHUNG (1 HOẶC 10 ACC) =====
+    function showRewardModal(title, sub, items, isVip) {
+      document.getElementById('rw-icon').innerText = isVip ? '🏆' : '🎮';
+      document.getElementById('rw-title').innerText = title;
+      document.getElementById('rw-title').className = `text-base font-black ${isVip ? 'text-amber-400' : 'text-emerald-400'}`;
+      document.getElementById('rw-sub').innerText = sub || '';
+      document.getElementById('rw-list').innerHTML = items.map((x, idx) => `
+        <div class="bg-slate-950 border ${x.vip ? 'border-amber-500/50' : 'border-slate-800'} rounded-2xl p-3 text-xs space-y-1.5">
+          <div class="flex justify-between items-center gap-2">
+            <b class="${x.vip ? 'text-amber-400' : 'text-emerald-400'}">${items.length > 1 ? `#${idx + 1} • ` : ''}${x.title}</b>
+            ${x.vip ? '<span class="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 text-[9px] font-black shrink-0">VIP</span>' : ''}
+          </div>
+          <div class="flex justify-between items-center bg-slate-900 px-2.5 py-1.5 rounded-lg">
+            <span class="text-slate-400">User: <b class="text-white ml-1">${x.user}</b></span>
+            <button onclick="copyText('${x.user}')" class="text-emerald-400"><i class="fas fa-copy"></i></button>
+          </div>
+          <div class="flex justify-between items-center bg-slate-900 px-2.5 py-1.5 rounded-lg">
+            <span class="text-slate-400">Pass: <b class="text-amber-400 ml-1">${x.pass}</b></span>
+            <button onclick="copyText('${x.pass}')" class="text-emerald-400"><i class="fas fa-copy"></i></button>
+          </div>
+        </div>
+      `).join('');
+      document.getElementById('reward-modal').classList.remove('hidden');
+    }
+
+    // ===== NẠP TIỀN VIETQR =====
+    function setAmt(n) { document.getElementById('topup-amount').value = n; updateQR(); }
 
     function updateQR() {
       const u = curr();
@@ -664,9 +838,7 @@
       const isAdm = u.role === 'admin';
       topups.unshift({
         id: 'TP' + Math.floor(1000 + Math.random() * 8999),
-        user: u.u,
-        amount: amt,
-        status: isAdm ? 'approved' : 'pending',
+        user: u.u, amount: amt, status: isAdm ? 'approved' : 'pending',
         time: new Date().toLocaleString('vi-VN')
       });
       set(K.T, topups);
@@ -704,10 +876,10 @@
     function renderHistory() {
       const u = curr();
       document.getElementById('purchased-logs').innerHTML = (u.bought || []).map(x => `
-        <div class="bg-slate-950 p-4 rounded-2xl border border-emerald-500/30 text-xs space-y-2">
-          <div class="flex justify-between items-center">
-            <span class="font-black text-emerald-400">#${x.id} • ${x.title}</span>
-            <span class="text-[10px] px-2 py-0.5 rounded bg-slate-900 text-slate-400">${x.type}</span>
+        <div class="bg-slate-950 p-4 rounded-2xl border ${x.vip ? 'border-amber-500/40' : 'border-emerald-500/30'} text-xs space-y-2">
+          <div class="flex justify-between items-center gap-2">
+            <span class="font-black ${x.vip ? 'text-amber-400' : 'text-emerald-400'}">#${x.id} • ${x.title}</span>
+            <span class="text-[10px] px-2 py-0.5 rounded bg-slate-900 text-slate-400 shrink-0">${x.type}</span>
           </div>
           <div class="flex justify-between bg-slate-900 px-3 py-2 rounded-xl">
             <span class="text-slate-400">User: <b class="text-white ml-1">${x.user}</b></span>
@@ -718,9 +890,10 @@
             <button onclick="copyText('${x.pass}')" class="text-emerald-400 font-bold"><i class="fas fa-copy"></i></button>
           </div>
         </div>
-      `).join('') || '<p class="col-span-full text-slate-500 text-xs text-center py-8">Chưa mua hoặc quay trúng acc nào.</p>';
+      `).join('') || '<p class="col-span-full text-slate-500 text-xs text-center py-8">Chưa có tài khoản nào.</p>';
     }
 
+    // ===== ADMIN =====
     function switchAdmTab(tab) {
       ['topups', 'accs', 'users'].forEach(t => {
         document.getElementById('adm-panel-' + t).classList.toggle('hidden', t !== tab);
